@@ -40,8 +40,6 @@ import java.util.ArrayList;
 public final class Main {
     
     public static void main(String[] args) throws SQLException {
-        
-        System.out.println("lalaallal");
     }
     
 }
