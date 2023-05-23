@@ -50,11 +50,12 @@ public class EmployeeDao extends Dao<Employee> {
         // SET
         // field_1 = value_1, field_2 = value_2, ..., field_n = value_n
         // WHERE id = id_value;
+        
         var rawStatement = new StringBuilder();
 
-        rawStatement.append("UPDATE");
+        rawStatement.append("UPDATE ");
         rawStatement.append(TABLE_NAME);
-        rawStatement.append("SET");
+        rawStatement.append(" SET ");
 
         rawStatement.append("credentials_id = ?, ");
         rawStatement.append("name = ?, ");
@@ -84,13 +85,13 @@ public class EmployeeDao extends Dao<Employee> {
         // (field_1, field_2, ..., field_n) 
         // VALUES 
         // (value_1, value_2, ..., value_n);
+        
         var rawStatement = new StringBuilder();
 
-        rawStatement.append("UPDATE");
+        rawStatement.append("INSERT INTO ");
         rawStatement.append(TABLE_NAME);
-        rawStatement.append("SET");
 
-        rawStatement.append("(credentials_id");
+        rawStatement.append(" (credentials_id");
         rawStatement.append(", name");
         rawStatement.append(", date_of_birth");
         rawStatement.append(", cpf");
@@ -103,7 +104,7 @@ public class EmployeeDao extends Dao<Employee> {
         rawStatement.append(", number");
         rawStatement.append(", cep");
         rawStatement.append(", primary_phone_number");
-        rawStatement.append("secondary_phone_number)");
+        rawStatement.append(", secondary_phone_number) ");
 
         rawStatement.append("VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 
@@ -147,7 +148,7 @@ public class EmployeeDao extends Dao<Employee> {
             s.setInt(13, e.getAddress().getCep());
             
             s.setLong(14, e.getPrimaryPhoneNumber());
-            //s.setLong(15, e.getSecondaryPhoneNumber());
+            s.setLong(15, e.getSecondaryPhoneNumber().get());
             
         }catch(SQLException ex){
             Logger.getLogger(EmployeeDao.class.getName()).log(Level.SEVERE, null, ex);
