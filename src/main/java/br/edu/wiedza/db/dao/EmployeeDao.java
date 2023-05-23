@@ -39,6 +39,16 @@ import java.util.logging.Logger;
  * @author maicon
  */
 public class EmployeeDao extends Dao<Employee> {
+    
+    private static EmployeeDao instance;
+    private EmployeeDao() {}
+    
+    public static EmployeeDao getInstance() {
+        if (instance == null) {
+            instance = new EmployeeDao();
+        }
+        return instance;
+    }
 
     public static final String TABLE_NAME = "employees";
 
@@ -141,15 +151,18 @@ public class EmployeeDao extends Dao<Employee> {
             
             s.setInt(8, e.getWeeklyWorkHours());
             
-            s.setString(10, e.getAddress().getStreet());
-            s.setString(11, e.getAddress().getDistrict());
-            s.setString(12, e.getAddress().getNumber());
+            s.setString(9, e.getAddress().getStreet());
+            s.setString(10, e.getAddress().getDistrict());
+            s.setString(11, e.getAddress().getNumber());
             
-            s.setInt(13, e.getAddress().getCep());
+            s.setInt(12, e.getAddress().getCep());
             
-            s.setLong(14, e.getPrimaryPhoneNumber());
-            s.setLong(15, e.getSecondaryPhoneNumber().get());
+            s.setLong(13, e.getPrimaryPhoneNumber());
+            s.setLong(14, e.getSecondaryPhoneNumber().get());
             
+            if (e.getId().isPresent()) {
+                s.setInt(15, e.getId().get());
+            }
         }catch(SQLException ex){
             Logger.getLogger(EmployeeDao.class.getName()).log(Level.SEVERE, null, ex);
         }
