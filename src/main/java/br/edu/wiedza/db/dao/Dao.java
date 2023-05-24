@@ -171,7 +171,9 @@ public abstract class Dao<E extends Entity> implements IDao<E> {
     
     // Converts a string of semicolon separated floats to a list of floats.
     public static ArrayList<Float>  fromSemicolonSeparatedFloats(String ssv) {
+        
         var floatList = new ArrayList<Float>();
+        if(ssv.isEmpty()) return floatList;
         var stringList =  new ArrayList<String>(Arrays.asList(ssv.split(";")));
         stringList.forEach(s -> floatList.add(Float.valueOf(s)));
         return floatList;
@@ -180,6 +182,7 @@ public abstract class Dao<E extends Entity> implements IDao<E> {
     // Converts a string of semicolon separated integers to a list of integers.
     public static ArrayList<Integer>  fromSemicolonSeparatedIntegers(String ssv) {
         var integerList = new ArrayList<Integer>();
+        if(ssv.isEmpty()) return integerList;
         var stringList =  new ArrayList<String>(Arrays.asList(ssv.split(";")));
         stringList.forEach(s -> integerList.add(Integer.valueOf(s)));
         return integerList;
