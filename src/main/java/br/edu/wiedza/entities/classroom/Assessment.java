@@ -56,6 +56,10 @@ public final class Assessment extends Entity {
         return studentsGrades.get(index);
     }
     
+    public List<Float> getGrades(){
+        return studentsGrades;
+    }
+    
     public Class getAssessmentClass() {
         return assessmentClass;
     }
