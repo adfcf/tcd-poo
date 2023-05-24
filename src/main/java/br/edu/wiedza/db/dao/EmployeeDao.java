@@ -116,7 +116,7 @@ public class EmployeeDao extends Dao<Employee> {
         rawStatement.append(", primary_phone_number");
         rawStatement.append(", secondary_phone_number) ");
 
-        rawStatement.append("VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+        rawStatement.append("VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 
         return rawStatement.toString();
     }
