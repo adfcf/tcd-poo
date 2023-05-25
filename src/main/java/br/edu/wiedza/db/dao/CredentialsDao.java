@@ -26,6 +26,9 @@ package br.edu.wiedza.db.dao;
 import br.edu.wiedza.entities.persons.Credentials;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * TO DO
@@ -43,39 +46,108 @@ public final class CredentialsDao extends Dao<Credentials> {
         return instance;
     }
     
+    public static final String TABLE_NAME = "credentials";
+    
     @Override
     protected String getUpdateStatement() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+
+        // Command format:
+        // UPDATE `table_name` 
+        // SET
+        // field_1 = value_1, field_2 = value_2, ..., field_n = value_n
+        // WHERE id = id_value;
+        var rawStatement = new StringBuilder();
+
+        rawStatement.append("UPDATE ");
+        rawStatement.append(TABLE_NAME);
+        rawStatement.append(" SET ");
+
+        rawStatement.append("user = ?, ");
+        rawStatement.append("password = ? ");
+
+        rawStatement.append("WHERE id = ?;");
+
+        return rawStatement.toString();
     }
 
     @Override
     protected String getCreateStatement() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        
+        // Command format:
+        // INSERT INTO `table_name` 
+        // (field_1, field_2, ..., field_n) 
+        // VALUES 
+        // (value_1, value_2, ..., value_n);
+        
+        var rawStatement = new StringBuilder();
+
+        rawStatement.append("INSERT INTO ");
+        rawStatement.append(TABLE_NAME);
+
+        rawStatement.append(" (user");
+        rawStatement.append(", password)");
+        
+        rawStatement.append("VALUES (?, ?);");
+
+        return rawStatement.toString();
     }
 
     @Override
     protected String getRetrieveAllStatement() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "SELECT * FROM " + TABLE_NAME + ";";
     }
 
     @Override
     protected String getFindByIdStatement(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "SELECT * FROM " + TABLE_NAME + " WHERE id = ?;";
     }
 
     @Override
     protected void putData(PreparedStatement s, Credentials e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        
+        try {
+            
+            s.setString(1, e.getUserName());
+            
+            s.setString(2, e.getPassword());
+            
+            if(e.getId().isPresent()){
+                s.setInt(3, e.getId().get());
+            }
+            
+        }catch(SQLException ex){
+            Logger.getLogger(CredentialsDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
     protected void putId(PreparedStatement s, int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        
+        try {
+            s.setInt(1, id);
+        } catch (SQLException ex) {
+            Logger.getLogger(CredentialsDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
     protected Credentials getObjectFrom(ResultSet resultSet) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        
+        Credentials c = null;
+        try {
+            
+            var id = resultSet.getInt(1);
+            
+            var user = resultSet.getString(2);
+            
+            var password = resultSet.getString(3);
+            
+            c = new Credentials(id, user, password);
+            
+        }catch(SQLException ex){
+            Logger.getLogger(CredentialsDao.class.getName()).log(Level.SEVERE, null, ex);
+        }    
+        
+        return c;
     }
-    
 }
