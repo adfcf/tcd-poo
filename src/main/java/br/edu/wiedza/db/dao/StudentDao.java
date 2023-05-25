@@ -91,7 +91,6 @@ public final class StudentDao extends Dao<Student> {
         rawStatement.append(TABLE_NAME);
         rawStatement.append(" SET ");
         
-        rawStatement.append("completed_courses_id = ?, ");
         rawStatement.append("credentials_id = ?, ");
         rawStatement.append("name = ?, ");
         rawStatement.append("date_of_birth = ?, ");
@@ -125,8 +124,7 @@ public final class StudentDao extends Dao<Student> {
         rawStatement.append("INSERT INTO ");
         rawStatement.append(TABLE_NAME);
             
-        rawStatement.append(" (completed_courses_id");
-        rawStatement.append(", credentials_id");
+        rawStatement.append("(credentials_id");
         rawStatement.append(", name");
         rawStatement.append(", date_of_birth");
         rawStatement.append(", cpf");
@@ -138,7 +136,7 @@ public final class StudentDao extends Dao<Student> {
         rawStatement.append(", secondary_phone_number");
         rawStatement.append(", active) ");
 
-        rawStatement.append("VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+        rawStatement.append("VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
         
         return rawStatement.toString();
         
@@ -167,37 +165,34 @@ public final class StudentDao extends Dao<Student> {
     protected void putData(PreparedStatement s, Student e) {
         try {
             
-            // Putting completed courses (a string with indices separated by semicolons)
-            s.setString(1, toSemicolonSeparatedValues(e.getCompletedCourses()));
-            
             // Putting credentials ID. They're guaranteed to be present in student objects.
-            s.setInt(2, e.getCredentials().get().getId().get());
+            s.setInt(1, e.getCredentials().get().getId().get());
              
             // Putting name.
-            s.setString(3, e.getName());
+            s.setString(2, e.getName());
             
             // Putting date of birth.
-            s.setObject(4, e.getDateOfBirth().toString(), JDBCType.DATE);
+            s.setObject(3, e.getDateOfBirth().toString(), JDBCType.DATE);
             
             // Putting CPF.
-            s.setLong(5, e.getCpf().asLong());
+            s.setLong(4, e.getCpf().asLong());
             
             // Putting address.
-            s.setString(6, e.getAddress().getStreet());
-            s.setString(7, e.getAddress().getDistrict());
-            s.setString(8, e.getAddress().getNumber());
-            s.setInt(   9, e.getAddress().getCep());
+            s.setString(5, e.getAddress().getStreet());
+            s.setString(6, e.getAddress().getDistrict());
+            s.setString(7, e.getAddress().getNumber());
+            s.setInt(   8, e.getAddress().getCep());
             
             // Putting phone numbers.
-            s.setLong(10, e.getPrimaryPhoneNumber());
-            s.setLong(11, e.getSecondaryPhoneNumber().orElse(Long.valueOf(0)));
+            s.setLong(9, e.getPrimaryPhoneNumber());
+            s.setLong(10, e.getSecondaryPhoneNumber().orElse(Long.valueOf(0)));
             
             // Putting active boolean.
-            s.setBoolean(12, e.isActive());
+            s.setBoolean(11, e.isActive());
             
             // If ID is present, then it's an update.
             if (e.getId().isPresent()) {
-                s.setInt(13, e.getId().get());
+                s.setInt(12, e.getId().get());
             }
             
         } catch (SQLException ex) {
@@ -211,34 +206,21 @@ public final class StudentDao extends Dao<Student> {
         try {
             
             final int id = resultSet.getInt(1);
-
-            /* CourseDao isn't implemented yet.
-            final ArrayList<Course> completedCourses = new ArrayList<>();
-            fromSemicolonSeparatedIntegers(resultSet.getString(2))
-                    .stream()
-                    .map(t -> CourseDao.getInstance().findById(t).get())
-                    .forEach(c -> completedCourses.add(c));
-            */
-            // Temporary command
-            final var completedCourses = new ArrayList<Course>();
             
-            // CredentialsDao isn't implemented yet.
-            // final var credentials = CredentialsDao.getInstance().findById(resultSet.getInt(3)).get();
-            // Temporary command
-            final var credentials = new Credentials(0, "user", "password");
+            final var credentials = CredentialsDao.getInstance().findById(resultSet.getInt(2)).get();
             
-            final var name = resultSet.getString(4);
-            final var dateOfBirth = dateFromString(resultSet.getString(5));
-            final var cpf = new Cpf(resultSet.getLong(6));
+            final var name = resultSet.getString(3);
+            final var dateOfBirth = dateFromString(resultSet.getString(4));
+            final var cpf = new Cpf(resultSet.getLong(5));
             final var address = new Address(
-                    resultSet.getInt(10), 
-                    resultSet.getString(7),
-                    resultSet.getString(8), 
-                    resultSet.getString(9));
+                    resultSet.getInt(9), 
+                    resultSet.getString(6),
+                    resultSet.getString(7), 
+                    resultSet.getString(8));
             
-            final long primaryPhoneNumber = resultSet.getLong(11);
-            final long secondaryPhoneNumber = resultSet.getLong(12);
-            final boolean active = resultSet.getBoolean(13);
+            final long primaryPhoneNumber = resultSet.getLong(10);
+            final long secondaryPhoneNumber = resultSet.getLong(11);
+            final boolean active = resultSet.getBoolean(12);
            
             s = new Student(
                     id,
@@ -249,7 +231,6 @@ public final class StudentDao extends Dao<Student> {
                     address,
                     primaryPhoneNumber,
                     secondaryPhoneNumber, 
-                    completedCourses,
                     active
             );
             

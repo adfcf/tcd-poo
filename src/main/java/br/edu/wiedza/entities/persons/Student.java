@@ -36,9 +36,7 @@ import static java.util.Objects.requireNonNull;
  * @author adfcf
  */
 public final class Student extends Person {
-    
-    private final List<Course> completedCourses;
-    
+        
     private boolean active;
     
     public Student(
@@ -54,15 +52,12 @@ public final class Student extends Person {
             Long secondaryPhoneNumber,
             
             // Student data
-            List<Course> completedCourses,
             boolean active
             
     ) {
         super(id, credentials, name, dateOfBirth, cpf, address, primaryPhoneNumber, secondaryPhoneNumber);
         
-        this.active = active;
-        this.completedCourses = requireNonNull(completedCourses);
-        
+        this.active = active;        
     }
     
     public boolean isActive() {
@@ -73,8 +68,5 @@ public final class Student extends Person {
         this.active = active;
     }
 
-    public List<Course> getCompletedCourses() {
-        return completedCourses;
-    }
     
 }
