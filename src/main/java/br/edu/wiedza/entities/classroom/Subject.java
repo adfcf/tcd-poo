@@ -23,10 +23,56 @@
  */
 package br.edu.wiedza.entities.classroom;
 
+import br.edu.wiedza.entities.Entity;
+import java.util.List;
+
 /**
  *
  * @author 
  */
-public class Subject {
-    // TO DO
+public class Subject extends Entity {
+
+    private final String name;
+    private final String code;
+    private final String content;
+    private final List<Subject> requirements;    
+    
+    private final int totalClassHours;
+
+    public Subject(String name, String code, int totalClassHours, String content, List<Subject> requirements, Integer id) {
+        super(id);
+        this.name = name;
+        this.code = code;
+        this.totalClassHours = totalClassHours;
+        this.content = content;
+        this.requirements = requirements;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public List<Subject> getRequirements() {
+        return requirements;
+    }
+
+    public int getTotalClassHours() {
+        return totalClassHours;
+    }
+    
+    public void removeRequirement(int id){
+        for (int i = 0; i < requirements.size(); ++i) {
+            if (requirements.get(i).getId().get() == id) {
+                requirements.remove(requirements.get(i));
+            }
+        }
+    }
 }
