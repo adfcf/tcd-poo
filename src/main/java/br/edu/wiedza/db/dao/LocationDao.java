@@ -67,7 +67,7 @@ public class LocationDao extends Dao<Location> {
         rawStatement.append("name = ?, ");
         rawStatement.append("capacity = ?, ");
         rawStatement.append("monthly_cost = ?, ");
-        rawStatement.append("description = ?");
+        rawStatement.append("description = ? ");
 
         rawStatement.append("WHERE id = ?;");
 
