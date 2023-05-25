@@ -160,10 +160,10 @@ public abstract class Dao<E extends Entity> implements IDao<E> {
         
     }
     
-    public static <T> String toSemicolonSeparatedValues(List<T> list) {
+    public static <T extends Entity> String toSemicolonSeparatedValues(List<T> list) {
         final var ssv = new StringBuilder();
         for (var element : list) {
-            ssv.append(element);
+            ssv.append(element.getId().get());
             ssv.append(';');
         }
         return ssv.toString();
