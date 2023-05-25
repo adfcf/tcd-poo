@@ -27,6 +27,34 @@ package br.edu.wiedza.entities;
  *
  * @author adfcf
  */
-public class Location {
+public class Location extends Entity{
     
+    private final String name;
+    private final int capacity;
+    private final float monthlyCost;
+    private final String description;
+
+    public Location(String name, int capacity, float monthlyCost, String description, Integer id) {
+        super(id);
+        this.name = name;
+        this.capacity = capacity;
+        this.monthlyCost = monthlyCost;
+        this.description = description;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public float getMonthlyCost() {
+        return monthlyCost;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }
