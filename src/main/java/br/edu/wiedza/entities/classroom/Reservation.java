@@ -23,10 +23,49 @@
  */
 package br.edu.wiedza.entities.classroom;
 
+import br.edu.wiedza.entities.Entity;
+import br.edu.wiedza.entities.Location;
+import java.sql.Time;
+import java.time.DayOfWeek;
+
 /**
  *
  * @author 
  */
-public class Reservation {
-    // TO DO 
+public class Reservation extends Entity{
+    
+    private final Location location;
+    private final DayOfWeek weekDay;
+    private final Time startTime;
+    
+    private final int numberOfClassHours;
+
+    public Reservation(Location location, DayOfWeek weekDay, Time startTime, int numberOfClassHours, Integer id) {
+        super(id);
+        this.location = location;
+        this.weekDay = weekDay;
+        this.startTime = startTime;
+        this.numberOfClassHours = numberOfClassHours;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public DayOfWeek getWeekDay() {
+        return weekDay;
+    }
+
+    public Time getStartTime() {
+        return startTime;
+    }
+
+    public int getNumberOfClassHours() {
+        return numberOfClassHours;
+    }
+    
+    
+    
+    
+    
 }
