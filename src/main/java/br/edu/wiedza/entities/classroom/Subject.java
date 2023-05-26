@@ -24,7 +24,6 @@
 package br.edu.wiedza.entities.classroom;
 
 import br.edu.wiedza.entities.Entity;
-import java.util.List;
 
 /**
  *
@@ -35,17 +34,17 @@ public class Subject extends Entity {
     private final String name;
     private final String code;
     private final String content;
-    private final List<Subject> requirements;    
+    private final Subject requirement;    
     
     private final int totalClassHours;
 
-    public Subject(String name, String code, int totalClassHours, String content, List<Subject> requirements, Integer id) {
+    public Subject(String name, String code, int totalClassHours, String content, Subject requirement, Integer id) {
         super(id);
         this.name = name;
         this.code = code;
         this.totalClassHours = totalClassHours;
         this.content = content;
-        this.requirements = requirements;
+        this.requirement = requirement;
     }
 
     public String getName() {
@@ -60,19 +59,11 @@ public class Subject extends Entity {
         return content;
     }
 
-    public List<Subject> getRequirements() {
-        return requirements;
+    public Subject getRequirement() {
+        return requirement;
     }
 
     public int getTotalClassHours() {
         return totalClassHours;
-    }
-    
-    public void removeRequirement(int id){
-        for (int i = 0; i < requirements.size(); ++i) {
-            if (requirements.get(i).getId().get() == id) {
-                requirements.remove(requirements.get(i));
-            }
-        }
     }
 }

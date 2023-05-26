@@ -94,7 +94,7 @@ public class SubjectDao extends Dao<Subject> {
         rawStatement.append(", code");
         rawStatement.append(", total_class_hours");
         rawStatement.append(", content");
-        rawStatement.append(", requirements)");
+        rawStatement.append(", requirement_id)");
         
         rawStatement.append("VALUES (?, ?, ?, ?, ?);");
 
@@ -124,7 +124,7 @@ public class SubjectDao extends Dao<Subject> {
             
             s.setString(4, e.getContent());
             
-            s.setString(5, toSemicolonSeparatedValues(e.getRequirements()));
+            s.setInt(5, e.getRequirement().getId().get());
             
             if(e.getId().isPresent()){
                 s.setInt(6, e.getId().get());
@@ -161,17 +161,13 @@ public class SubjectDao extends Dao<Subject> {
             
             final var content = resultSet.getString(5);
             
-            final var requirements = new ArrayList<Subject>();
-            fromSemicolonSeparatedIntegers(resultSet.getString(6))
-                    .stream()
-                    .map(t -> instance.findById(t).get())
-                    .forEach(r ->requirements.add(r));
+            final Subject requirement = SubjectDao.getInstance().findById(resultSet.getInt(6)).get();
             
             s = new Subject(name,
                             code,
                totalHoursWorked,
                             content,
-                            requirements,
+                            requirement,
                             id
             );
             
