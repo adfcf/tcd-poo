@@ -30,7 +30,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -160,40 +162,10 @@ public abstract class Dao<E extends Entity> implements IDao<E> {
         
     }
     
-    public static <T extends Entity> String toSemicolonSeparatedValues(List<T> list) {
-        final var ssv = new StringBuilder();
-        for (var element : list) {
-            ssv.append(element.getId().get());
-            ssv.append(';');
-        }
-        return ssv.toString();
-    }
     
-    // Converts a string of semicolon separated floats to a list of floats.
-    public static ArrayList<Float>  fromSemicolonSeparatedFloats(String ssv) {
-        
-        var floatList = new ArrayList<Float>();
-        var stringList =  new ArrayList<String>(Arrays.asList(ssv.split(";")));
-        stringList.forEach(s -> floatList.add(Float.valueOf(s)));
-        return floatList;
-    }
     
-    // Converts a string of semicolon separated integers to a list of integers.
-    public static ArrayList<Integer>  fromSemicolonSeparatedIntegers(String ssv) {
-        var integerList = new ArrayList<Integer>();
-        var stringList =  new ArrayList<String>(Arrays.asList(ssv.split(";")));
-        stringList.forEach(s -> integerList.add(Integer.valueOf(s)));
-        return integerList;
-    }
+
     
-    public static LocalDate dateFromString(String s) {
-        
-        final int year = Integer.parseInt(s.substring(0, 4));
-        final int month = Integer.parseInt(s.substring(5, 7));
-        final int day = Integer.parseInt(s.substring(8, 10));
-        
-        return LocalDate.of(year, Month.of(month), day);
-        
-    }
+
     
 }

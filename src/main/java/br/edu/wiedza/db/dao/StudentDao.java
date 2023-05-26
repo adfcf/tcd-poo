@@ -210,7 +210,7 @@ public final class StudentDao extends Dao<Student> {
             final var credentials = CredentialsDao.getInstance().findById(resultSet.getInt(2)).get();
             
             final var name = resultSet.getString(3);
-            final var dateOfBirth = dateFromString(resultSet.getString(4));
+            final var dateOfBirth = resultSet.getDate(4).toLocalDate();
             final var cpf = new Cpf(resultSet.getLong(5));
             final var address = new Address(
                     resultSet.getInt(9), 

@@ -187,11 +187,11 @@ public class EmployeeDao extends Dao<Employee> {
             final int id = resultSet.getInt(1);
             
             //temporary code. Need to implement CredentialsDao
-            final var credentialsId = new Credentials(0, "username", "password");
+            final var credentials = CredentialsDao.getInstance().findById(resultSet.getInt(2)).get();
             
             final var name = resultSet.getString(3);
             
-            final var dateOfBirth = dateFromString(resultSet.getString(4));
+            final var dateOfBirth = resultSet.getDate(4).toLocalDate();
             
             final var cpf = new Cpf(resultSet.getLong(5));
             
@@ -215,13 +215,14 @@ public class EmployeeDao extends Dao<Employee> {
             
             final var secondaryPhoneNumber = resultSet.getLong(15);
             
+            final var address = new Address(cep, number, street, district);
             e = new Employee(
                     id,
-                    credentialsId,
+                    credentials,
                     name,
                     dateOfBirth,
                     cpf,
-                    new Address(cep, number, street, district),
+                    address,
                     primaryPhoneNumber,
                     secondaryPhoneNumber,
                     sector,

@@ -36,18 +36,18 @@ public final class Assessment extends Entity {
     
     private final Class assessmentClass;
     private final String name;
-    private final List<Float> studentsGrades;
+    private  List<Float> studentsGrades;
     
     private final float value;
     
-    public Assessment(Integer id, Class assessmentClass, String name, List<Float> studentsGrades, float value) {
+    public Assessment(Integer id, Class assessmentClass, String name/*,private final List<Float> studentsGrades;*/, float value) {
         
         super(id);
         
         this.value = value;
      
         this.assessmentClass = requireNonNull(assessmentClass);
-        this.studentsGrades = requireNonNull(studentsGrades);
+        // this.studentsGrades = requireNonNull(studentsGrades);
         this.name = requireNonNull(name);
         
     }

@@ -24,6 +24,7 @@
 package br.edu.wiedza.entities.classroom;
 
 import br.edu.wiedza.entities.Entity;
+import br.edu.wiedza.entities.persons.Employee;
 
 /**
  *
@@ -31,9 +32,38 @@ import br.edu.wiedza.entities.Entity;
  * @author adfcf
  */
 public class Course extends Entity {
-
-    public Course(Integer id) {
-        super(id);
-    }
+    private final Subject subject;
     
+    private final Employee teacher;
+    
+    private final int year;
+    
+    private final Boolean completed;
+    
+
+
+    public Course(Integer id,Subject subject, Employee teacher, int year, Boolean completed) {
+        super(id);
+        this.subject = subject;
+        this.teacher = teacher;
+        this.year = year;
+        this.completed = completed;
+    }
+
+    public Subject getSubject() {
+        return subject;
+    }
+
+    public Employee getTeacher() {
+        return teacher;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public Boolean getCompleted() {
+        return completed;
+    }
+
 }

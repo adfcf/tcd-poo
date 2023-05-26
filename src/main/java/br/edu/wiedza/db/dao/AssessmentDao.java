@@ -72,8 +72,7 @@ public class AssessmentDao extends Dao<Assessment> {
         rawStatement.append("class_id = ?, ");
         rawStatement.append("name = ?, ");
         rawStatement.append("value = ?, ");
-        rawStatement.append("grades = ? ");
-    
+
         rawStatement.append("WHERE id = ?;");
 
         return rawStatement.toString();
@@ -96,9 +95,9 @@ public class AssessmentDao extends Dao<Assessment> {
         rawStatement.append(" (class_id");
         rawStatement.append(", name");
         rawStatement.append(", value");
-        rawStatement.append(", grades) ");
 
-        rawStatement.append("VALUES (?, ?, ?, ?);");
+
+        rawStatement.append("VALUES (?, ?, ?);");
 
         return rawStatement.toString();
     }
@@ -125,10 +124,9 @@ public class AssessmentDao extends Dao<Assessment> {
         
             s.setFloat(3, e.getValue());
             
-            s.setString(4, toSemicolonSeparatedValues(e.getGrades()));
            
             if(e.getId().isPresent()){
-                s.setInt(5, e.getId().get());
+                s.setInt(4, e.getId().get());
             }
         }catch(SQLException ex){
             Logger.getLogger(AssessmentDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -156,20 +154,17 @@ public class AssessmentDao extends Dao<Assessment> {
             final var id = resultSet.getInt(1);
             
             //TO DO: Use ClassDao to get the Class object
-            final var classId = resultSet.getInt(2);
+            final var assessmentClass= ClassDao.getinstance().findById(resultSet.getInt(2)).get();
             
             final var name = resultSet.getString(3);
             
             final var value = resultSet.getFloat(4);
             
-            final var grades = new ArrayList<Float>();
-            fromSemicolonSeparatedFloats(resultSet.getString(5))
-                    .forEach(ac -> grades.add(ac));
+            
             
             a = new Assessment(id, 
-                    new Class(classId, new Offering(1), "name", LocalDate.now(), LocalTime.now(),2),
+                    assessmentClass,
                     name,
-                    grades,
                     value);
             
         }catch (SQLException ex) {

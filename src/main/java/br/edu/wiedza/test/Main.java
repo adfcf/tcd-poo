@@ -24,10 +24,16 @@
 package br.edu.wiedza.test;
 
 import br.edu.wiedza.db.Database;
+import br.edu.wiedza.db.dao.CourseDao;
+import br.edu.wiedza.db.dao.EmployeeDao;
 import br.edu.wiedza.db.dao.StudentDao;
+import br.edu.wiedza.db.dao.SubjectDao;
+import br.edu.wiedza.entities.classroom.Course;
+import br.edu.wiedza.entities.classroom.Subject;
 import br.edu.wiedza.entities.persons.components.Address;
 import br.edu.wiedza.entities.persons.components.Cpf;
 import br.edu.wiedza.entities.persons.Credentials;
+import br.edu.wiedza.entities.persons.Employee;
 import br.edu.wiedza.entities.persons.Student;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -40,6 +46,12 @@ import java.util.ArrayList;
 public final class Main {
     
     public static void main(String[] args) throws SQLException {
+        Employee teacher = EmployeeDao.getInstance().findById(1).get();
+        Subject subject = SubjectDao.getInstance().findById(1).get();
+        
+        Course c = new Course(null,subject,teacher,9999,true);
+        CourseDao.getInstance().createOrUpdate(c);
+   
     }
     
 }

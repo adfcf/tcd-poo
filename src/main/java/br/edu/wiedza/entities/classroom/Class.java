@@ -35,18 +35,18 @@ import static java.util.Objects.requireNonNull;
  */
 public final class Class extends Entity {
     
-    private final Offering offering;
+    private final Course course;
     private final String content;
     private final LocalDate date;
     private final LocalTime startTime;
     
     private final int numberOfClassHours;
     
-    public Class(Integer id, Offering offering, String content, LocalDate date, LocalTime startTime, int numberOfClassHours) {
+    public Class(Integer id, Course course, String content, LocalDate date, LocalTime startTime, int numberOfClassHours) {
         
         super(id);
         
-        this.offering = requireNonNull(offering);
+        this.course = requireNonNull(course);
         this.content = requireNonNull(content);
         this.date = requireNonNull(date);
         this.startTime = requireNonNull(startTime);
@@ -55,8 +55,8 @@ public final class Class extends Entity {
         
     }  
 
-    public Offering getOffering() {
-        return offering;
+    public Course getCourse() {
+        return course;
     }
 
     public String getContent() {
