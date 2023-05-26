@@ -64,7 +64,7 @@ public class CourseDao extends Dao<Course> {
         rawStatement.append("subject_id = ?, ");
         rawStatement.append("teacher_id = ?, ");
         rawStatement.append("year = ?, ");
-        rawStatement.append("completed = ?, ");
+        rawStatement.append("completed = ? ");
 
         // Very important clause to select the correct entity.
         rawStatement.append("WHERE id = ?;");
@@ -82,13 +82,13 @@ public class CourseDao extends Dao<Course> {
 
         var rawStatement = new StringBuilder();
 
-        rawStatement.append("INSERT INTO");
+        rawStatement.append("INSERT INTO ");
         rawStatement.append(TABLE_NAME);
 
-        rawStatement.append("(subject_id");
+        rawStatement.append(" (subject_id");
         rawStatement.append(", teacher_id");
         rawStatement.append(", year");
-        rawStatement.append(", completed)");
+        rawStatement.append(", completed) ");
 
         rawStatement.append("VALUES (?, ?, ?, ?);");
 

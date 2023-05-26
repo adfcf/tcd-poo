@@ -27,7 +27,6 @@ import br.edu.wiedza.entities.classroom.Subject;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -161,7 +160,12 @@ public class SubjectDao extends Dao<Subject> {
             
             final var content = resultSet.getString(5);
             
-            final Subject requirement = SubjectDao.getInstance().findById(resultSet.getInt(6)).get();
+            final var requirementOpt = SubjectDao.getInstance().findById(resultSet.getInt(6));
+            
+            Subject requirement = null;
+            if(requirementOpt.isPresent()){
+                requirement = requirementOpt.get();
+            }
             
             s = new Subject(name,
                             code,

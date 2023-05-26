@@ -23,7 +23,9 @@
  */
 package br.edu.wiedza.db.dao;
 
-import br.edu.wiedza.entities.classroom.Assessment;
+import br.edu.wiedza.entities.Occurrence;
+import java.sql.Date;
+import java.sql.JDBCType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,21 +36,20 @@ import java.util.logging.Logger;
  *
  * @author maicon
  */
-public class AssessmentDao extends Dao<Assessment> {
-
-    private static AssessmentDao instance;
-    private AssessmentDao() {}
+public class OccurrenceDao extends Dao<Occurrence>{
     
-    public static AssessmentDao getInstance() {
+    private static OccurrenceDao instance;
+    private OccurrenceDao() {}
+    
+    public static OccurrenceDao getInstance() {
         if (instance == null) {
-            instance = new AssessmentDao();
+            instance = new OccurrenceDao();
         }
         return instance;
     }
-
-    public static final String TABLE_NAME = "assessments";
-
     
+    public static final String TABLE_NAME = "occurrences";
+
     @Override
     protected String getUpdateStatement() {
         
@@ -57,16 +58,15 @@ public class AssessmentDao extends Dao<Assessment> {
         // SET
         // field_1 = value_1, field_2 = value_2, ..., field_n = value_n
         // WHERE id = id_value;
-        
         var rawStatement = new StringBuilder();
 
         rawStatement.append("UPDATE ");
         rawStatement.append(TABLE_NAME);
         rawStatement.append(" SET ");
 
-        rawStatement.append("class_id = ?, ");
-        rawStatement.append("name = ?, ");
-        rawStatement.append("value = ?, ");
+        rawStatement.append("student_id = ?, ");
+        rawStatement.append("date = ?, ");
+        rawStatement.append("description = ? ");    
 
         rawStatement.append("WHERE id = ?;");
 
@@ -87,11 +87,10 @@ public class AssessmentDao extends Dao<Assessment> {
         rawStatement.append("INSERT INTO ");
         rawStatement.append(TABLE_NAME);
 
-        rawStatement.append(" (class_id");
-        rawStatement.append(", name");
-        rawStatement.append(", value");
-
-
+        rawStatement.append(" (student_id");
+        rawStatement.append(", date");
+        rawStatement.append(", description)");
+        
         rawStatement.append("VALUES (?, ?, ?);");
 
         return rawStatement.toString();
@@ -99,73 +98,62 @@ public class AssessmentDao extends Dao<Assessment> {
 
     @Override
     protected String getRetrieveAllStatement() {
-        
         return "SELECT * FROM " + TABLE_NAME + ";";
     }
 
     @Override
     protected String getFindByIdStatement(int id) {
-        
-        return "SELECT * FROM " + TABLE_NAME + " WHERE id = ?;";
+        return "SELECT * FROM " + TABLE_NAME + " WHERE id=?;";
     }
 
     @Override
-    protected void putData(PreparedStatement s, Assessment e) {
+    protected void putData(PreparedStatement s, Occurrence e) {
         
         try {
-            s.setInt(1, e.getAssessmentClass().getId().get());
-        
-            s.setString(2, e.getName());
-        
-            s.setFloat(3, e.getValue());
             
-           
+            s.setInt(1, e.getStudent().getId().get());
+            
+            s.setObject(2, e.getDate(), JDBCType.DATE);
+            
+            s.setString(3, e.getDescription());
+            
             if(e.getId().isPresent()){
                 s.setInt(4, e.getId().get());
             }
-        }catch(SQLException ex){
-            Logger.getLogger(AssessmentDao.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(OccurrenceDao.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
     }
 
     @Override
     protected void putId(PreparedStatement s, int id) {
-        
         try {
             s.setInt(1, id);
         } catch (SQLException ex) {
-            Logger.getLogger(AssessmentDao.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OccurrenceDao.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Override
-    protected Assessment getObjectFrom(ResultSet resultSet) {
+    protected Occurrence getObjectFrom(ResultSet resultSet) {
         
-        Assessment a = null;
-        
-        try{
+        Occurrence o = null;
+        try {
             
-            final var id = resultSet.getInt(1);
+            var id = resultSet.getInt(1);
             
-            //TO DO: Use ClassDao to get the Class object
-            final var assessmentClass= ClassDao.getinstance().findById(resultSet.getInt(2)).get();
+            var student = StudentDao.getInstance().findById(resultSet.getInt(2)).get();
             
-            final var name = resultSet.getString(3);
+            var date = resultSet.getDate(3).toLocalDate();
             
-            final var value = resultSet.getFloat(4);
+            var description = resultSet.getString(4);
             
-            
-            
-            a = new Assessment(id, 
-                    assessmentClass,
-                    name,
-                    value);
-            
-        }catch (SQLException ex) {
-            Logger.getLogger(EmployeeDao.class.getName()).log(Level.SEVERE, null, ex);
+            o = new Occurrence(student, date, description, id);
+        } catch (SQLException ex) {
+            Logger.getLogger(OccurrenceDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        return a;
+        return o;
     }
+    
 }
