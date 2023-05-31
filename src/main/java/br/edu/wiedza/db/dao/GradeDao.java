@@ -88,7 +88,7 @@ public class GradeDao extends Dao<Grade>{
 
         rawStatement.append(" (assessment_id");
         rawStatement.append(", student_id");
-        rawStatement.append(", student_grade)");
+        rawStatement.append(", student_grade) ");
         
         rawStatement.append("VALUES (?, ?, ?);");
 
