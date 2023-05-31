@@ -93,7 +93,7 @@ public class SubjectDao extends Dao<Subject> {
         rawStatement.append(", code");
         rawStatement.append(", total_class_hours");
         rawStatement.append(", content");
-        rawStatement.append(", requirement_id)");
+        rawStatement.append(", requirement_id) ");
         
         rawStatement.append("VALUES (?, ?, ?, ?, ?);");
 
