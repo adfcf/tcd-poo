@@ -51,6 +51,9 @@ public final class Credentials extends Entity {
     public String getPassword() {
         return password;
     }
- 
+
+    public boolean authenticate(String password) {
+        return this.password.equals(password);
+    }
     
 }
