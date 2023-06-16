@@ -43,8 +43,8 @@ public final class Database {
                 + "&serverTimezone=UTC"
                 + "&autoReconnect=true";
     
-    public static final String USER = "wiedza";
-    public static final String PASSWORD = "4HCBHSJ5vLezd[fL";
+    public static final String USER = "";
+    public static final String PASSWORD = "";
     
     public static Connection getConnection() {
         if (connection == null) {
