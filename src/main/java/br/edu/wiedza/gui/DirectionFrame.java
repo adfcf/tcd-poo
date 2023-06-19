@@ -33,6 +33,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -446,7 +447,7 @@ public class DirectionFrame extends javax.swing.JFrame {
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(9, 9, 9)
+                .addGap(15, 15, 15)
                 .addComponent(checkLocationCosts)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(checkTeachingCost)
@@ -458,7 +459,7 @@ public class DirectionFrame extends javax.swing.JFrame {
                 .addComponent(checkSecretariatCost)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(checkOtherCost)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -598,13 +599,11 @@ public class DirectionFrame extends javax.swing.JFrame {
         final Location selectedLocation = getSelectedLocation();
         if (selectedLocation != null) {
             new LocationForm(selectedLocation, true).setVisible(true);
+        } else {
+            Util.disableAll(btnEditLocation, btnViewLocation);
+            JOptionPane.showMessageDialog(this, "Por favor, selecione uma instalação para editá-la ou visualizá-la.");
         }
     }//GEN-LAST:event_btnViewLocationActionPerformed
-
-    // The user selected a (new) value in the list.
-    private void listLocationsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listLocationsValueChanged
-        Util.enableAll(btnViewLocation, btnEditLocation);
-    }//GEN-LAST:event_listLocationsValueChanged
 
     private void btnEditLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditLocationActionPerformed
         final Location selectedLocation = getSelectedLocation();
@@ -617,6 +616,9 @@ public class DirectionFrame extends javax.swing.JFrame {
                     updateEntities();
                 }
             });
+        } else {
+            Util.disableAll(btnEditLocation, btnViewLocation);
+            JOptionPane.showMessageDialog(this, "Por favor, selecione uma instalação para editá-la ou visualizá-la.");
         }
     }//GEN-LAST:event_btnEditLocationActionPerformed
 
@@ -635,6 +637,9 @@ public class DirectionFrame extends javax.swing.JFrame {
         final Employee selectedEmployee = getSelectedEmployee();
         if (selectedEmployee != null) {
             new EmployeeForm(selectedEmployee, true).setVisible(true);
+        } else {
+            Util.disableAll(btnEditEmployee, btnViewEmployee);
+            JOptionPane.showMessageDialog(this, "Por favor, selecione funcionário para editar/visualizar seus dados.");
         }    
     }//GEN-LAST:event_btnViewEmployeeActionPerformed
 
@@ -689,19 +694,21 @@ public class DirectionFrame extends javax.swing.JFrame {
         Util.enableAll(btnViewEmployee, btnEditEmployee);
     }//GEN-LAST:event_listEmployeesValueChanged
 
+    
     private void btnEditEmployeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditEmployeeActionPerformed
         final Employee selectedEmployee = getSelectedEmployee();
         if (selectedEmployee != null) {
             final var form = new EmployeeForm(selectedEmployee, false);
             form.setVisible(true);
-            setEnabled(false);
             form.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(WindowEvent e) {
                     updateEntities();
-                    setEnabled(true);
                 }
             });
+        } else {
+            Util.disableAll(btnEditEmployee, btnViewEmployee);
+            JOptionPane.showMessageDialog(this, "Por favor, selecione funcionário para editar/visualizar seus dados.");
         }
     }//GEN-LAST:event_btnEditEmployeeActionPerformed
 
@@ -712,9 +719,14 @@ public class DirectionFrame extends javax.swing.JFrame {
             @Override
             public void windowClosed(WindowEvent e) {
                 updateEntities();
+                requestFocus();
             }
         });
     }//GEN-LAST:event_btnNewEmployeeActionPerformed
+
+    private void listLocationsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listLocationsValueChanged
+        Util.enableAll(btnViewLocation, btnEditLocation);
+    }//GEN-LAST:event_listLocationsValueChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

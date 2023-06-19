@@ -23,9 +23,18 @@
  */
 package br.edu.wiedza.gui.forms;
 
+import br.edu.wiedza.db.dao.CredentialsDao;
+import br.edu.wiedza.db.dao.EmployeeDao;
 import br.edu.wiedza.entities.persons.Credentials;
 import br.edu.wiedza.entities.persons.Employee;
+import br.edu.wiedza.entities.persons.components.Address;
+import br.edu.wiedza.entities.persons.components.Cpf;
+import br.edu.wiedza.gui.LoginFrame;
+import br.edu.wiedza.gui.Util;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.Optional;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -81,7 +90,7 @@ public class EmployeeForm extends javax.swing.JFrame {
             txtCep.setEditable(false);
             txtNumber.setEditable(false);
             
-            comboSector.setEditable(false);
+            comboSector.setEnabled(false);
             txtRole.setEditable(false);
             txtSalary.setEditable(false);
             txtHours.setEditable(false);
@@ -128,7 +137,10 @@ public class EmployeeForm extends javax.swing.JFrame {
         
     }
     
-    
+    private void invalidFieldMessage(String s) {
+        lblStatus.setForeground(LoginFrame.DEFAULT_RED);
+        lblStatus.setText(s);      
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -149,7 +161,6 @@ public class EmployeeForm extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         txtCep = new javax.swing.JFormattedTextField();
-        txtSalary = new javax.swing.JFormattedTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         txtStreet = new javax.swing.JTextField();
@@ -171,13 +182,13 @@ public class EmployeeForm extends javax.swing.JFrame {
         txtHours = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
-        btnClear = new javax.swing.JButton();
         btnOk = new javax.swing.JButton();
         lblStatus = new javax.swing.JLabel();
         jSeparator3 = new javax.swing.JSeparator();
         spinnerDay = new javax.swing.JSpinner();
         spinnerMonth = new javax.swing.JSpinner();
         spinnerYear = new javax.swing.JSpinner();
+        txtSalary = new javax.swing.JTextField();
 
         jTextField9.setText("jTextField9");
 
@@ -191,21 +202,28 @@ public class EmployeeForm extends javax.swing.JFrame {
         jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
         txtName.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtName.setNextFocusableComponent(txtUserName);
+        txtName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtNameKeyPressed(evt);
+            }
+        });
 
         txtUserName.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txtUserName.setToolTipText("Nome único pelo qual o usuário acessará o sistema.");
+        txtUserName.setToolTipText("");
+        txtUserName.setNextFocusableComponent(txtCpf);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Usuário:");
-        jLabel2.setToolTipText("Nome único pelo qual o usuário acessará o sistema.");
+        jLabel2.setToolTipText("");
 
         txtPassword.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txtPassword.setToolTipText("A senha de primeiro acesso é o CPF do usuário. ");
+        txtPassword.setToolTipText("");
         txtPassword.setEnabled(false);
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel3.setText("Senha:");
-        jLabel3.setToolTipText("A senha de primeiro acesso é o CPF do usuário. ");
+        jLabel3.setToolTipText("");
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel4.setText("CPF:");
@@ -216,9 +234,7 @@ public class EmployeeForm extends javax.swing.JFrame {
             ex.printStackTrace();
         }
         txtCep.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-
-        txtSalary.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter()));
-        txtSalary.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtCep.setNextFocusableComponent(txtNumber);
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel5.setText("Data de Nascimento:");
@@ -227,8 +243,10 @@ public class EmployeeForm extends javax.swing.JFrame {
         jLabel6.setText("Logradouro:");
 
         txtStreet.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtStreet.setNextFocusableComponent(txtDistrict);
 
         txtDistrict.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtDistrict.setNextFocusableComponent(txtCep);
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel7.setText("Bairro:");
@@ -242,19 +260,23 @@ public class EmployeeForm extends javax.swing.JFrame {
             ex.printStackTrace();
         }
         txtCpf.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtCpf.setNextFocusableComponent(spinnerDay);
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel9.setText("Número:");
 
         txtNumber.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtNumber.setNextFocusableComponent(comboSector);
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel10.setText("Setor:");
 
         comboSector.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         comboSector.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ensino", "Coordenação", "Secretaria", "Direção", "Outro" }));
+        comboSector.setNextFocusableComponent(txtRole);
 
         txtRole.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtRole.setNextFocusableComponent(txtSalary);
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel11.setText("Cargo:");
@@ -268,6 +290,7 @@ public class EmployeeForm extends javax.swing.JFrame {
             ex.printStackTrace();
         }
         txtSecondaryPhone.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtSecondaryPhone.setNextFocusableComponent(txtStreet);
 
         jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel13.setText("Telefone secundário:");
@@ -278,22 +301,17 @@ public class EmployeeForm extends javax.swing.JFrame {
             ex.printStackTrace();
         }
         txtPrimaryPhone.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtPrimaryPhone.setNextFocusableComponent(txtSecondaryPhone);
 
+        txtHours.setColumns(5);
         txtHours.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtHours.setText("40");
 
         jLabel14.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel14.setText("Horas de trabalho (semanais):");
 
         jLabel15.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel15.setText("Salário:");
-
-        btnClear.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnClear.setText("Limpar");
-        btnClear.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnClearActionPerformed(evt);
-            }
-        });
 
         btnOk.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnOk.setText("OK");
@@ -304,7 +322,7 @@ public class EmployeeForm extends javax.swing.JFrame {
         });
 
         lblStatus.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        lblStatus.setText("Por favor, preencha corretamente os dados acima.");
+        lblStatus.setText(" ");
 
         spinnerDay.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         spinnerDay.setModel(new javax.swing.SpinnerNumberModel(1, 1, 31, 1));
@@ -314,6 +332,11 @@ public class EmployeeForm extends javax.swing.JFrame {
 
         spinnerYear.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         spinnerYear.setModel(new javax.swing.SpinnerNumberModel(2005, 1923, 2005, 1));
+        spinnerYear.setNextFocusableComponent(txtStreet);
+
+        txtSalary.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtSalary.setText("1200");
+        txtSalary.setNextFocusableComponent(txtHours);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -367,9 +390,11 @@ public class EmployeeForm extends javax.swing.JFrame {
                             .addComponent(txtRole, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel15)
-                                    .addComponent(txtSalary, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel15)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(txtSalary))
+                                .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtHours, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel14))))
@@ -378,11 +403,9 @@ public class EmployeeForm extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 656, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGap(32, 32, 32)
-                                .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(54, 54, 54)
+                                .addGap(6, 6, 6)
                                 .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(37, 37, 37)
+                                .addGap(18, 18, 18)
                                 .addComponent(lblStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addContainerGap(18, Short.MAX_VALUE))))
         );
@@ -457,8 +480,8 @@ public class EmployeeForm extends javax.swing.JFrame {
                                     .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(txtSalary, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtHours, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(txtHours, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtSalary, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap(13, Short.MAX_VALUE)
@@ -467,7 +490,6 @@ public class EmployeeForm extends javax.swing.JFrame {
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnClear)
                     .addComponent(btnOk)
                     .addComponent(lblStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(15, Short.MAX_VALUE))
@@ -475,20 +497,144 @@ public class EmployeeForm extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    
+    private Employee extractNewEmployee() {
+        
+        final var name = txtName.getText();
+        
+        if (!Validator.ofName(name)) {
+            invalidFieldMessage("O nome informado não é válido.");
+            return null;
+        }
+        
+        final var userName = txtUserName.getText();
+        final var password = txtPassword.getText();
+            
+        if (!Validator.ofUserName(userName)) {
+            invalidFieldMessage("O nome de usuário informado não é válido.");
+            return null;
+        }
+            
+        if (Util.removeSpecialCharacters(txtCpf.getText()).isEmpty()) {
+            invalidFieldMessage("O CPF informado não é válido.");
+            return null;
+        }
+        
+        Cpf cpf = new Cpf(0);
+        try {
+            cpf = new Cpf(Long.parseLong(Util.removeSpecialCharacters(txtCpf.getText())));
+        } catch (Exception e) {
+        }
+            
+        final var dateOfBirth = LocalDate.of(
+                (Integer) spinnerYear.getValue(), 
+                (Integer) spinnerMonth.getValue(), 
+                (Integer) spinnerDay.getValue());
+        
+        if (Util.removeSpecialCharacters(txtPrimaryPhone.getText()).isEmpty()) {
+            invalidFieldMessage("É necessário preencher ao menos o telefone principal.");
+            return null;
+        }
+        final var primaryPhone = Long.parseLong(Util.removeSpecialCharacters(txtPrimaryPhone.getText()));
+        
+       // final var secondaryPhone = Util.removeSpecialCharacters(txtPrimaryPhone.getText()).isEmpty() ? 0L : Long.parseLong(Util.removeSpecialCharacters(txtSecondaryPhone.getText()));
+            
+        final var street = txtStreet.getText();
+        final var district = txtDistrict.getText();
+        final var cep = txtCep.getText();
+        final var number = txtNumber.getText();
 
-    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnClearActionPerformed
+        if (street.isEmpty() || district.isEmpty() || cep.isEmpty() || number.isEmpty()) {
+            invalidFieldMessage("Verifique o endereço informado. Os campos não podem ser vazios.");
+            return null;
+        }
+        final var address = new Address(Integer.parseInt(Util.removeSpecialCharacters(cep)), number, street, district);
+        
+        final var sector = Employee.Sector.fromString(comboSector.getModel().getSelectedItem().toString());
+        
+        final var role = txtRole.getText();
+        if (role.isEmpty()) {
+            invalidFieldMessage("O cargo do funcionário deve ser informado.");
+            return null;
+        }
 
+        if (!Validator.ofPositiveFloat(txtSalary.getText())) {
+            invalidFieldMessage("O salário informado não é válido.");
+            return null;
+        }
+        final var salary = Float.parseFloat(txtSalary.getText());
+          
+        if (!Validator.ofPositiveInteger(txtHours.getText())) {
+            invalidFieldMessage("A quantidade de horas não é válida.");
+            return null;
+        }
+        final var hours = Integer.parseInt(txtHours.getText());
+        
+        final var credentials = new Credentials(null, userName, password);
+        
+        return new Employee(
+                null, 
+                credentials,
+                name,
+                dateOfBirth,
+                cpf,
+                address,
+                primaryPhone,
+                0L,     
+                sector,
+                role,
+                salary,
+                hours
+        );
+       
+    }
+    
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
         
+        if (readOnly) {
+            dispose();
+            return;
+        }
         
+        Employee e = extractNewEmployee();
+        
+        // Validation failed
+        if (e == null) {
+            return;
+        }
+        
+        btnOk.setEnabled(false);
+        
+        java.awt.EventQueue.invokeLater(() -> {
+            
+            String message = "Dados de funcionário atualizados com sucesso.";
+        
+            if (selectedEmployee.isPresent()) { // if it already exists, it's an update.
+                e.setId(selectedEmployee.get().getId().get());
+                e.getCredentials().get().setId(selectedEmployee.get().getCredentials().get().getId().get());
+            } else {
+                e.getCredentials().get().setId(CredentialsDao.getInstance().createOrUpdate(e.getCredentials().get()).get());
+                message = "Funcionário cadastrado com sucesso.";
+            }
+           
+            EmployeeDao.getInstance().createOrUpdate(e);
+        
+            JOptionPane.showMessageDialog(this, message);
+            dispose();
+            
+        });
         
     }//GEN-LAST:event_btnOkActionPerformed
 
+    private void txtNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNameKeyPressed
+        java.awt.EventQueue.invokeLater(() -> {
+            final var text = txtName.getText().toLowerCase().trim().replace(" ", ".");
+            txtUserName.setText(text);
+        });
+    }//GEN-LAST:event_txtNameKeyPressed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnClear;
     private javax.swing.JButton btnOk;
     private javax.swing.JComboBox<String> comboSector;
     private javax.swing.JLabel jLabel1;
@@ -523,9 +669,10 @@ public class EmployeeForm extends javax.swing.JFrame {
     private javax.swing.JTextField txtPassword;
     private javax.swing.JFormattedTextField txtPrimaryPhone;
     private javax.swing.JTextField txtRole;
-    private javax.swing.JFormattedTextField txtSalary;
+    private javax.swing.JTextField txtSalary;
     private javax.swing.JFormattedTextField txtSecondaryPhone;
     private javax.swing.JTextField txtStreet;
     private javax.swing.JTextField txtUserName;
     // End of variables declaration//GEN-END:variables
 }
+

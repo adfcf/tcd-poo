@@ -115,10 +115,10 @@ public class LocationForm extends javax.swing.JFrame {
         btnClear = new javax.swing.JButton();
         txtName = new javax.swing.JTextField();
         spinnerCapacity = new javax.swing.JSpinner();
-        txtCost = new javax.swing.JTextField();
         lblDatabaseStatus = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtDescription = new javax.swing.JTextArea();
+        txtCost = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Formulário de Instalação");
@@ -159,10 +159,6 @@ public class LocationForm extends javax.swing.JFrame {
         spinnerCapacity.setModel(new javax.swing.SpinnerNumberModel(40, 1, 500, 1));
         spinnerCapacity.setEnabled(false);
 
-        txtCost.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txtCost.setEnabled(false);
-        txtCost.setKeymap(null);
-
         lblDatabaseStatus.setForeground(new java.awt.Color(102, 102, 0));
 
         txtDescription.setColumns(20);
@@ -170,6 +166,10 @@ public class LocationForm extends javax.swing.JFrame {
         txtDescription.setRows(5);
         txtDescription.setEnabled(false);
         jScrollPane2.setViewportView(txtDescription);
+
+        txtCost.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtCost.setText("100");
+        txtCost.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -185,6 +185,9 @@ public class LocationForm extends javax.swing.JFrame {
                         .addComponent(btnOk)
                         .addGap(25, 25, 25))
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblDatabaseStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(194, 194, 194))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel4)
@@ -194,10 +197,7 @@ public class LocationForm extends javax.swing.JFrame {
                             .addComponent(jLabel3)
                             .addComponent(spinnerCapacity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtCost, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 29, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblDatabaseStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(194, 194, 194))))
+                        .addGap(0, 29, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -218,13 +218,13 @@ public class LocationForm extends javax.swing.JFrame {
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtCost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblDatabaseStatus, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnClear)
                         .addComponent(btnOk)))
-                .addContainerGap(8, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();

@@ -53,6 +53,16 @@ public class Employee extends Person {
             return name;
         }
         
+        public static Sector fromString(String s) {
+            return switch (s) {
+                case "Secretaria" -> Sector.SECRETARIAT;
+                case "Coordenação" -> Sector.COORDENATION;
+                case "Direção" -> Sector.DIRECTION;
+                case "Ensino" -> Sector.TEACHING;
+                default -> Sector.OTHER;
+            };
+        }
+        
     }
     
     private Sector sector;

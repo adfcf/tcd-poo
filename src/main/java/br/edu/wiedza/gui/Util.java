@@ -62,4 +62,8 @@ public final class Util {
         }   
     }
     
+    public static String removeSpecialCharacters(String s) {
+        return s.replace("(", "").replace(")", "").replace(".", "").replace("-", "").replace(" ", "");
+    }
+    
 }

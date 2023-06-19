@@ -129,7 +129,8 @@ public class EmployeeDao extends Dao<Employee> {
              +   TABLE_NAME 
              + " INNER JOIN " + CredentialsDao.TABLE_NAME
              + " ON " + TABLE_NAME + ".credentials_id = " + CredentialsDao.TABLE_NAME + ".id"
-             + " WHERE user = ? AND password = ?;";
+             + " WHERE user = ? AND password = ?"
+             + "ORDER BY " + TABLE_NAME + ".name;";
     }
     
     @Override
@@ -137,7 +138,8 @@ public class EmployeeDao extends Dao<Employee> {
         return "SELECT " + TABLE_NAME + ".*, " + CredentialsDao.TABLE_NAME + ".* " + " FROM "  
              +   TABLE_NAME 
              + " INNER JOIN " + CredentialsDao.TABLE_NAME
-             + " ON " + TABLE_NAME + ".credentials_id = " + CredentialsDao.TABLE_NAME + ".id;";
+             + " ON " + TABLE_NAME + ".credentials_id = " + CredentialsDao.TABLE_NAME + ".id "
+             + "ORDER BY " + TABLE_NAME + ".name;";
     }
 
     @Override
@@ -146,7 +148,8 @@ public class EmployeeDao extends Dao<Employee> {
              +   TABLE_NAME 
              + " INNER JOIN " + CredentialsDao.TABLE_NAME
              + " ON " + TABLE_NAME + ".credentials_id = " + CredentialsDao.TABLE_NAME + ".id"
-             + " WHERE user = ?;";
+             + " WHERE user = ? "
+             + "ORDER BY " + TABLE_NAME + ".name;";
     }
 
     @Override
