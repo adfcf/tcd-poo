@@ -39,15 +39,15 @@
                       <EmptySpace min="-2" pref="194" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jScrollPane2" min="-2" pref="360" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="jScrollPane2" pref="360" max="32767" attributes="0"/>
                           <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel2" min="-2" pref="72" max="-2" attributes="0"/>
-                          <Component id="txtName" min="-2" pref="360" max="-2" attributes="0"/>
+                          <Component id="txtName" pref="360" max="32767" attributes="0"/>
                           <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="spinnerCapacity" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="txtCost" alignment="0" min="-2" pref="73" max="-2" attributes="0"/>
+                          <Component id="jLabel2" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="0" pref="29" max="32767" attributes="0"/>
                   </Group>
@@ -183,6 +183,11 @@
               <Font name="Segoe UI" size="14" style="0"/>
             </Property>
             <Property name="rows" type="int" value="5"/>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
+                <EtchetBorder/>
+              </Border>
+            </Property>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>

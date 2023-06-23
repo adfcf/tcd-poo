@@ -164,6 +164,7 @@ public class LocationForm extends javax.swing.JFrame {
         txtDescription.setColumns(20);
         txtDescription.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtDescription.setRows(5);
+        txtDescription.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         txtDescription.setEnabled(false);
         jScrollPane2.setViewportView(txtDescription);
 
@@ -188,15 +189,15 @@ public class LocationForm extends javax.swing.JFrame {
                         .addComponent(lblDatabaseStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(194, 194, 194))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
                             .addComponent(jLabel4)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtName, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
                             .addComponent(jLabel1)
                             .addComponent(jLabel3)
                             .addComponent(spinnerCapacity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtCost, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtCost, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(0, 29, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
