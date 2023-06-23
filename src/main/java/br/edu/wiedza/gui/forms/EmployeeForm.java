@@ -218,6 +218,7 @@ public class EmployeeForm extends javax.swing.JFrame {
         jLabel2.setToolTipText("");
 
         txtPassword.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtPassword.setText("***********");
         txtPassword.setToolTipText("");
         txtPassword.setEnabled(false);
 
@@ -508,7 +509,6 @@ public class EmployeeForm extends javax.swing.JFrame {
         }
         
         final var userName = txtUserName.getText();
-        final var password = txtPassword.getText();
             
         if (!Validator.ofUserName(userName)) {
             invalidFieldMessage("O nome de usuário informado não é válido.");
@@ -526,6 +526,8 @@ public class EmployeeForm extends javax.swing.JFrame {
         } catch (Exception e) {
         }
             
+        final var password = Util.removeSpecialCharacters(txtCpf.getText());
+        
         final var dateOfBirth = LocalDate.of(
                 (Integer) spinnerYear.getValue(), 
                 (Integer) spinnerMonth.getValue(), 
