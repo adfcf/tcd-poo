@@ -29,7 +29,6 @@ import br.edu.wiedza.entities.persons.Credentials;
 import br.edu.wiedza.entities.persons.Employee;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.sql.Connection;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -208,7 +207,7 @@ public class LoginFrame extends javax.swing.JFrame {
         
         final var sector = e.getSector();
         switch (sector) {
-            case SECRETARIAT -> new SecretariatFrame().setVisible(true);
+            case SECRETARIAT -> new SecretariatFrame(e).setVisible(true);
             case COORDENATION -> new CoordenationFrame().setVisible(true);
             case DIRECTION -> new DirectionFrame(e).setVisible(true);
             case TEACHING -> new TeachingFrame().setVisible(true);
