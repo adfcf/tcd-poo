@@ -144,12 +144,21 @@ public final class StudentDao extends Dao<Student> {
 
     @Override
     protected String getRetrieveAllStatement() {
-        return "SELECT * FROM " + TABLE_NAME + ";";
+        return "SELECT " + TABLE_NAME + ".*, " + CredentialsDao.TABLE_NAME + ".*" + " FROM "
+                + TABLE_NAME
+                + " INNER JOIN " + CredentialsDao.TABLE_NAME
+                + " ON " + TABLE_NAME + ".credentials_id = " + CredentialsDao.TABLE_NAME + ".id"
+                + " ORDER BY " + TABLE_NAME + ".name;";
     }
 
     @Override
     protected String getFindByIdStatement() {
-        return "SELECT * FROM " + TABLE_NAME + " WHERE id = ?;";
+        return "SELECT " + TABLE_NAME + ".*, " + CredentialsDao.TABLE_NAME + ".*" + " FROM "
+                + TABLE_NAME
+                + " INNER JOIN " + CredentialsDao.TABLE_NAME
+                + " ON " + TABLE_NAME + ".credentials_id = " + CredentialsDao.TABLE_NAME + ".id"
+                + " WHERE id = ?"
+                + " ORDER BY " + TABLE_NAME + ".name;";
     }
 
     @Override
@@ -206,22 +215,26 @@ public final class StudentDao extends Dao<Student> {
         try {
             
             final int id = resultSet.getInt(1);
-            
-            final var credentials = CredentialsDao.getInstance().findById(resultSet.getInt(2)).get();
-            
+                        
             final var name = resultSet.getString(3);
             final var dateOfBirth = resultSet.getDate(4).toLocalDate();
             final var cpf = new Cpf(resultSet.getLong(5));
             final var address = new Address(
                     resultSet.getInt(9), 
-                    resultSet.getString(6),
-                    resultSet.getString(7), 
-                    resultSet.getString(8));
+                    resultSet.getString(8),
+                    resultSet.getString(6), 
+                    resultSet.getString(7));
             
             final long primaryPhoneNumber = resultSet.getLong(10);
             final long secondaryPhoneNumber = resultSet.getLong(11);
             final boolean active = resultSet.getBoolean(12);
-           
+            
+            final var credentialsId = resultSet.getInt(13);
+            final var userName = resultSet.getString(14);
+            final var password = resultSet.getString(15); 
+            
+            final var credentials = new Credentials(credentialsId, userName, password);
+            
             s = new Student(
                     id,
                     credentials,
