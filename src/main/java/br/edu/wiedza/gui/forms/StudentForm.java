@@ -23,17 +23,100 @@
  */
 package br.edu.wiedza.gui.forms;
 
+import br.edu.wiedza.db.dao.CredentialsDao;
+import br.edu.wiedza.db.dao.StudentDao;
+import br.edu.wiedza.entities.persons.Credentials;
+import br.edu.wiedza.entities.persons.Student;
+import br.edu.wiedza.entities.persons.components.Address;
+import br.edu.wiedza.entities.persons.components.Cpf;
+import br.edu.wiedza.gui.LoginFrame;
+import br.edu.wiedza.gui.Util;
+import java.time.LocalDate;
+import java.util.Optional;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author maicon
  */
 public class StudentForm extends javax.swing.JFrame {
 
+    private final Optional<Student> selectedStudent;
+    
+    private final boolean readOnly;
     /**
      * Creates new form StudentForm
+     * @param s
+     * @param readOnly
      */
-    public StudentForm() {
+    public StudentForm(Student s, boolean readOnly) {
         initComponents();
+        
+        setLocationRelativeTo(null);
+        setFocusable(true);
+        
+        selectedStudent = Optional.ofNullable(s);
+        selectedStudent.ifPresent(ss -> {
+            if(ss.getId().isEmpty()) throw new IllegalArgumentException("The given student must have a valid database ID");
+        });
+        
+        this.readOnly = readOnly && s != null;
+        
+        setUp();
+    }
+    
+    private void setUp(){
+        
+        if(readOnly){
+            
+            txtName.setEditable(false);
+            txtUserName.setEditable(false);
+            txtPassword.setEditable(false);
+            
+            txtStreet1.setEditable(false);
+            txtDistrict1.setEditable(false);
+            txtNumber1.setEditable(false);
+            txtCep.setEditable(false);
+            
+            txtCpf.setEditable(false);
+            
+            spinnerDay.setEnabled(false);
+            spinnerMonth.setEnabled(false);
+            spinnerYear.setEnabled(false);
+            
+            txtPrimaryPhone.setEditable(false);
+            txtSecondaryPhone.setEditable(false);
+        }
+        
+        if(selectedStudent.isPresent()){
+            
+            final var s = selectedStudent.get();
+            
+            txtName.setText(s.getName());
+            
+            final var c = s.getCredentials().orElse(new Credentials(null, "N/A", "N/A"));
+            
+            txtUserName.setText(s.getCredentials().get().getUserName());
+            
+            txtStreet1.setText(s.getAddress().getStreet());
+            txtDistrict1.setText(s.getAddress().getDistrict());
+            txtCep1.setText(String.valueOf(s.getAddress().getCep()));
+            txtNumber1.setText(s.getAddress().getNumber());
+            
+            txtCpf.setText(String.valueOf(s.getCpf().asLong()));
+            
+            spinnerDay.setValue(Integer.valueOf(s.getDateOfBirth().getDayOfMonth()));
+            spinnerMonth.setValue(Integer.valueOf(s.getDateOfBirth().getMonthValue()));
+            spinnerYear.setValue(Integer.valueOf(s.getDateOfBirth().getYear()));
+            
+            txtPrimaryPhone.setText(String.valueOf(s.getPrimaryPhoneNumber()));
+            txtSecondaryPhone.setText(String.valueOf(s.getSecondaryPhoneNumber().get().longValue()));
+        }
+    }
+    
+    private void invalidFieldMessage(String s) {
+        lblStatus.setForeground(LoginFrame.DEFAULT_RED);
+        lblStatus.setText(s);      
     }
 
     /**
@@ -80,7 +163,9 @@ public class StudentForm extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
         jSeparator3 = new javax.swing.JSeparator();
-        jButton1 = new javax.swing.JButton();
+        btnOk = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        lblStatus = new javax.swing.JLabel();
 
         txtDistrict.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
@@ -204,20 +289,23 @@ public class StudentForm extends javax.swing.JFrame {
 
         jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
-        jButton1.setFont(new java.awt.Font("DejaVu Sans", 0, 14)); // NOI18N
-        jButton1.setText("Ok");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnOk.setFont(new java.awt.Font("DejaVu Sans", 0, 14)); // NOI18N
+        btnOk.setText("Ok");
+        btnOk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnOkActionPerformed(evt);
             }
         });
+
+        lblStatus.setFont(new java.awt.Font("DejaVu Sans", 0, 14)); // NOI18N
+        lblStatus.setText(" ");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(17, 17, 17)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -264,17 +352,22 @@ public class StudentForm extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(spinnerYear, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtSecondaryPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblPrimaryPhone))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtPrimaryPhone, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addComponent(txtPrimaryPhone, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtSecondaryPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblPrimaryPhone))))
+                        .addGap(0, 0, 0))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(31, 31, 31)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(16, Short.MAX_VALUE))
+                        .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -317,38 +410,111 @@ public class StudentForm extends javax.swing.JFrame {
                         .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(31, 31, 31)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(lblCpf)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(txtCpf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(lblPrimaryPhone)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(txtSecondaryPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addComponent(jLabel12)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(txtPrimaryPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(lblBirthDate)
+                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblCpf)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtCpf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(spinnerDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(spinnerMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(spinnerYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(spinnerYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(1, 1, 1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblBirthDate)
+                        .addGap(34, 34, 34))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblPrimaryPhone)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtSecondaryPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel12)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtPrimaryPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(1, 1, 1)))
                 .addGap(37, 37, 37)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnOk)
+                    .addComponent(jLabel1)
+                    .addComponent(lblStatus))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private Student extractNewStudent(){
+        
+        final var name = txtName.getText();
+        
+        if (!Validator.ofName(name)) {
+            invalidFieldMessage("O nome informado não é válido.");
+            return null;
+        }
+        
+        final var userName = txtUserName.getText();
+            
+        if (!Validator.ofUserName(userName)) {
+            invalidFieldMessage("O nome de usuário informado não é válido.");
+            return null;
+        }
+            
+        if (Util.removeSpecialCharacters(txtCpf.getText()).isEmpty()) {
+            invalidFieldMessage("O CPF informado não é válido.");
+            return null;
+        }
+        
+        Cpf cpf = new Cpf(0);
+        try {
+            cpf = new Cpf(Long.parseLong(Util.removeSpecialCharacters(txtCpf.getText())));
+        } catch (Exception e) {
+        }
+            
+        final var password = Util.removeSpecialCharacters(txtCpf.getText());
+        
+        final var dateOfBirth = LocalDate.of(
+                (Integer) spinnerYear.getValue(), 
+                (Integer) spinnerMonth.getValue(), 
+                (Integer) spinnerDay.getValue());
+        
+        if (Util.removeSpecialCharacters(txtPrimaryPhone.getText()).isEmpty()) {
+            invalidFieldMessage("É necessário preencher ao menos o telefone principal.");
+            return null;
+        }
+        final var primaryPhone = Long.parseLong(Util.removeSpecialCharacters(txtPrimaryPhone.getText()));
+        
+       // final var secondaryPhone = Util.removeSpecialCharacters(txtPrimaryPhone.getText()).isEmpty() ? 0L : Long.parseLong(Util.removeSpecialCharacters(txtSecondaryPhone.getText()));
+            
+        final var street = txtStreet1.getText();
+        final var district = txtDistrict1.getText();
+        final var cep = txtCep1.getText();
+        final var number = txtNumber1.getText();
+
+        if (street.isEmpty() || district.isEmpty() || cep.isEmpty() || number.isEmpty()) {
+            invalidFieldMessage("Verifique o endereço informado. Os campos não podem ser vazios.");
+            return null;
+        }
+        final var address = new Address(Integer.parseInt(Util.removeSpecialCharacters(cep)), number, street, district);
+        
+        final var c = new Credentials(null, userName, password);
+        
+        return new Student(null,
+                c,
+                name,
+                dateOfBirth,
+                cpf,
+                address,
+                primaryPhone,
+                0L,
+                true);
+    }
+    
     private void txtNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNameKeyPressed
         java.awt.EventQueue.invokeLater(() -> {
             final var text = txtName.getText().toLowerCase().trim().replace(" ", ".");
@@ -356,47 +522,43 @@ public class StudentForm extends javax.swing.JFrame {
         });
     }//GEN-LAST:event_txtNameKeyPressed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(StudentForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(StudentForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(StudentForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(StudentForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
+        
+        if(readOnly){
+            dispose();
+            return;
         }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new StudentForm().setVisible(true);
+        
+        Student s = extractNewStudent();
+        
+        if(s == null){
+            return;
+        }
+        
+        btnOk.setEnabled(false);
+        
+        java.awt.EventQueue.invokeLater(() -> {
+            
+            String message = "Dados de aluno atualizados com sucesso.";
+        
+            if (selectedStudent.isPresent()) { // if it already exists, it's an update.
+                s.setId(selectedStudent.get().getId().get());
+                s.getCredentials().get().setId(selectedStudent.get().getCredentials().get().getId().get());
+            } else {
+                s.getCredentials().get().setId(CredentialsDao.getInstance().createOrUpdate(s.getCredentials().get()).get());
+                message = "Aluno cadastrado com sucesso.";
             }
+           
+            StudentDao.getInstance().createOrUpdate(s);
+        
+            JOptionPane.showMessageDialog(this, message);
+            dispose();
         });
-    }
+    }//GEN-LAST:event_btnOkActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnOk;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -413,6 +575,7 @@ public class StudentForm extends javax.swing.JFrame {
     private javax.swing.JLabel lblNumber;
     private javax.swing.JLabel lblPassword;
     private javax.swing.JLabel lblPrimaryPhone;
+    private javax.swing.JLabel lblStatus;
     private javax.swing.JLabel lblStreet;
     private javax.swing.JLabel lblUserName;
     private javax.swing.JSpinner spinnerDay;
