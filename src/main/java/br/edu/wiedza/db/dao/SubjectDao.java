@@ -23,10 +23,14 @@
  */
 package br.edu.wiedza.db.dao;
 
+import br.edu.wiedza.db.Database;
 import br.edu.wiedza.entities.classroom.Subject;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Types;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -68,7 +72,7 @@ public class SubjectDao extends Dao<Subject> {
         rawStatement.append("code = ?, ");
         rawStatement.append("total_class_hours = ?, ");
         rawStatement.append("content = ?, ");
-        rawStatement.append("requirements = ? ");
+        rawStatement.append("requirement_id = ? ");
 
         rawStatement.append("WHERE id = ?;");
 
@@ -77,13 +81,12 @@ public class SubjectDao extends Dao<Subject> {
 
     @Override
     protected String getCreateStatement() {
-        
+
         // Command format:
         // INSERT INTO `table_name` 
         // (field_1, field_2, ..., field_n) 
         // VALUES 
         // (value_1, value_2, ..., value_n);
-        
         var rawStatement = new StringBuilder();
 
         rawStatement.append("INSERT INTO ");
@@ -94,7 +97,7 @@ public class SubjectDao extends Dao<Subject> {
         rawStatement.append(", total_class_hours");
         rawStatement.append(", content");
         rawStatement.append(", requirement_id) ");
-        
+
         rawStatement.append("VALUES (?, ?, ?, ?, ?);");
 
         return rawStatement.toString();
@@ -102,40 +105,51 @@ public class SubjectDao extends Dao<Subject> {
 
     @Override
     protected String getRetrieveAllStatement() {
-        return "SELECT * FROM " + TABLE_NAME + ";";
+        return "SELECT * FROM " +TABLE_NAME+ 
+                " LEFT JOIN  " +TABLE_NAME+ 
+                " AS s1 ON s1.requirement_id = " 
+                +TABLE_NAME+ ".id;";
     }
 
     @Override
     protected String getFindByIdStatement() {
-        return "SELECT * FROM " + TABLE_NAME + " WHERE id = ?;";
+        return "SELECT * FROM " +TABLE_NAME+ 
+                " s1 LEFT JOIN " +TABLE_NAME+ 
+                " ON s1.requirement_id = " 
+                +TABLE_NAME
+                + ".id WHERE s1.id = ?;";
     }
 
     @Override
     protected void putData(PreparedStatement s, Subject e) {
-        
+
         try {
-            
+
             s.setString(1, e.getName());
-            
+
             s.setString(2, e.getCode());
-            
+
             s.setInt(3, e.getTotalClassHours());
-            
+
             s.setString(4, e.getContent());
-            
-            s.setInt(5, e.getRequirement().getId().get());
-            
-            if(e.getId().isPresent()){
+
+            if (e.getRequirement() != null) {
+                s.setInt(5, e.getRequirement().getId().get());
+            } else {
+                s.setNull(5, Types.INTEGER);
+            }
+
+            if (e.getId().isPresent()) {
                 s.setInt(6, e.getId().get());
             }
-        }catch(SQLException ex){
+        } catch (SQLException ex) {
             Logger.getLogger(SubjectDao.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Override
     protected void putId(PreparedStatement s, int id) {
-        
+
         try {
             s.setInt(1, id);
         } catch (SQLException ex) {
@@ -145,40 +159,55 @@ public class SubjectDao extends Dao<Subject> {
 
     @Override
     protected Subject getObjectFrom(ResultSet resultSet) {
-        
+
         Subject s = null;
-        
-        try {
-            
+        try{
             final var id = resultSet.getInt(1);
-            
+
             final var name = resultSet.getString(2);
             
             final var code = resultSet.getString(3);
-            
+
             final var totalHoursWorked = resultSet.getInt(4);
-            
+
             final var content = resultSet.getString(5);
-            
-            final var requirementOpt = SubjectDao.getInstance().findById(resultSet.getInt(6));
-            
+            final int requirementId = resultSet.getInt(6);
             Subject requirement = null;
-            if(requirementOpt.isPresent()){
-                requirement = requirementOpt.get();
-            }
-            
-            s = new Subject(name,
-                            code,
-               totalHoursWorked,
-                            content,
-                            requirement,
-                            id
+            if (requirementId != 0) {
+               
+                final var id1 = resultSet.getInt(7);
+
+                final var name1 = resultSet.getString(8);
+
+                final var code1 = resultSet.getString(9);
+
+                final var totalHoursWorked1 = resultSet.getInt(10);
+
+                final var content1 = resultSet.getString(11);
+
+                Subject requirement1 = null;
+                requirement = new Subject(name1,
+                    code1,
+                    totalHoursWorked1,
+                    content1,
+                    requirement1,
+                    id1
             );
-            
-        }catch(SQLException ex){
+            }
+
+            s = new Subject(name,
+                    code,
+                    totalHoursWorked,
+                    content,
+                    requirement,
+                    id
+            );
+
+        } catch (SQLException ex) {
             Logger.getLogger(SubjectDao.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return s;
     }
+
 }

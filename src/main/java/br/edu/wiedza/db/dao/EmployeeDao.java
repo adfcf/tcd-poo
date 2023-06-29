@@ -148,7 +148,7 @@ public class EmployeeDao extends Dao<Employee> {
              +   TABLE_NAME 
              + " INNER JOIN " + CredentialsDao.TABLE_NAME
              + " ON " + TABLE_NAME + ".credentials_id = " + CredentialsDao.TABLE_NAME + ".id"
-             + " WHERE user = ? "
+             + " WHERE  " +  TABLE_NAME + ".id = ? "
              + "ORDER BY " + TABLE_NAME + ".name;";
     }
 
