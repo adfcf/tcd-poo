@@ -92,23 +92,99 @@ public class CoordenationFrame extends javax.swing.JFrame {
 
         groupCourseYear = new javax.swing.ButtonGroup();
         tPane = new javax.swing.JTabbedPane();
-        jPanel2 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        listSubjects = new javax.swing.JList<>();
-        btnNewSubject = new javax.swing.JButton();
-        btnViewSubject = new javax.swing.JButton();
-        btnEditSubject = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         listCourses = new javax.swing.JList<>();
         btnNewCourse = new javax.swing.JButton();
         btnViewCourse = new javax.swing.JButton();
         btnEditCourse = new javax.swing.JButton();
+        btnReportCourses = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        listSubjects = new javax.swing.JList<>();
+        btnNewSubject = new javax.swing.JButton();
+        btnViewSubject = new javax.swing.JButton();
+        btnEditSubject = new javax.swing.JButton();
+        btnReportSubject = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         lblName = new javax.swing.JLabel();
         btnExit = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        listCourses.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        listCourses.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane1.setViewportView(listCourses);
+
+        btnNewCourse.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnNewCourse.setText("Cadastrar");
+        btnNewCourse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNewCourseActionPerformed(evt);
+            }
+        });
+
+        btnViewCourse.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnViewCourse.setText("Visualizar");
+        btnViewCourse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewCourseActionPerformed(evt);
+            }
+        });
+
+        btnEditCourse.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnEditCourse.setText("Editar");
+        btnEditCourse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditCourseActionPerformed(evt);
+            }
+        });
+
+        btnReportCourses.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
+        btnReportCourses.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconReport.png"))); // NOI18N
+        btnReportCourses.setText("<html> <p>Relatório  <br>Ofertas </p>   <html>");
+        btnReportCourses.setEnabled(false);
+        btnReportCourses.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReportCoursesActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnNewCourse, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
+                    .addComponent(btnViewCourse, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnEditCourse, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnReportCourses))
+                .addGap(34, 34, 34))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(34, 34, 34)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(btnNewCourse)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnViewCourse)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnEditCourse)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnReportCourses, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(10, Short.MAX_VALUE))
+        );
+
+        tPane.addTab("Ofertas", jPanel4);
 
         listSubjects.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         listSubjects.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -145,19 +221,30 @@ public class CoordenationFrame extends javax.swing.JFrame {
             }
         });
 
+        btnReportSubject.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
+        btnReportSubject.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconReport.png"))); // NOI18N
+        btnReportSubject.setText("<html> <p>Relatório  <br>Disciplinas </p>   <html>");
+        btnReportSubject.setEnabled(false);
+        btnReportSubject.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReportSubjectActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnNewSubject, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnViewSubject, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnEditSubject, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(15, Short.MAX_VALUE))
+                    .addComponent(btnEditSubject, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnReportSubject, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGap(39, 39, 39))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -170,72 +257,13 @@ public class CoordenationFrame extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(btnViewSubject)
                         .addGap(18, 18, 18)
-                        .addComponent(btnEditSubject)))
+                        .addComponent(btnEditSubject)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnReportSubject, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(7, Short.MAX_VALUE))
         );
 
         tPane.addTab("Disciplinas", jPanel2);
-
-        listCourses.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        listCourses.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jScrollPane1.setViewportView(listCourses);
-
-        btnNewCourse.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnNewCourse.setText("Cadastrar");
-        btnNewCourse.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNewCourseActionPerformed(evt);
-            }
-        });
-
-        btnViewCourse.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnViewCourse.setText("Visualizar");
-        btnViewCourse.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnViewCourseActionPerformed(evt);
-            }
-        });
-
-        btnEditCourse.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnEditCourse.setText("Editar");
-        btnEditCourse.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditCourseActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(9, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnNewCourse)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(btnEditCourse, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnViewCourse, javax.swing.GroupLayout.Alignment.LEADING)))
-                .addContainerGap())
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(btnNewCourse)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnViewCourse)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnEditCourse)
-                        .addGap(104, 104, 104))
-                    .addComponent(jScrollPane1))
-                .addGap(47, 47, 47))
-        );
-
-        tPane.addTab("Ofertas", jPanel4);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel1.setText("Bem vindo(a),");
@@ -263,22 +291,21 @@ public class CoordenationFrame extends javax.swing.JFrame {
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblName, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(12, Short.MAX_VALUE)
+                .addContainerGap(9, Short.MAX_VALUE)
                 .addComponent(tPane, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel1)
-                        .addComponent(lblName))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(lblName)
                     .addComponent(btnExit))
-                .addGap(13, 13, 13))
+                .addGap(16, 16, 16))
         );
 
         pack();
@@ -384,6 +411,14 @@ public class CoordenationFrame extends javax.swing.JFrame {
         lf.setVisible(true);
         lf.start();
     }//GEN-LAST:event_btnExitActionPerformed
+
+    private void btnReportSubjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportSubjectActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnReportSubjectActionPerformed
+
+    private void btnReportCoursesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportCoursesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnReportCoursesActionPerformed
     private void setCourseListByYear(int year) {
         final var s2 = new DefaultListModel<String>();
         for (int i = 0; i < allCourses.size(); ++i) {
@@ -399,6 +434,8 @@ public class CoordenationFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnNewCourse;
     private javax.swing.JButton btnNewSubject;
+    private javax.swing.JButton btnReportCourses;
+    private javax.swing.JButton btnReportSubject;
     private javax.swing.JButton btnViewCourse;
     private javax.swing.JButton btnViewSubject;
     private javax.swing.ButtonGroup groupCourseYear;
