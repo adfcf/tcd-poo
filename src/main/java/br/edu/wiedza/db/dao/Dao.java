@@ -25,17 +25,11 @@ package br.edu.wiedza.db.dao;
 
 import br.edu.wiedza.db.Database;
 import br.edu.wiedza.entities.Entity;
-import java.lang.reflect.Type;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Time;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.Month;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,7 +57,7 @@ public abstract class Dao<E extends Entity> implements IDao<E> {
         try (var statement = db.prepareStatement(getUpdateStatement(), Statement.RETURN_GENERATED_KEYS)) {
             
             putData(statement, e);
-            System.out.println("SQL: " + statement.toString());
+            // System.out.println("SQL: " + statement.toString());
             
             final int count = statement.executeUpdate();
             System.out.println("Affected rows: " + count);
@@ -81,7 +75,7 @@ public abstract class Dao<E extends Entity> implements IDao<E> {
         try (var statement = db.prepareStatement(getCreateStatement(), Statement.RETURN_GENERATED_KEYS)) {
             
             putData(statement, e);
-            System.out.println("SQL: " + statement.toString());
+            // System.out.println("SQL: " + statement.toString());
             
             statement.executeUpdate();
             var keys = statement.getGeneratedKeys();
@@ -121,7 +115,7 @@ public abstract class Dao<E extends Entity> implements IDao<E> {
         
         try (var statement = db.prepareStatement(getRetrieveAllStatement(), Statement.RETURN_GENERATED_KEYS)) {
             
-            System.out.println("SQL: " + statement.toString());
+            // System.out.println("SQL: " + statement.toString());
             
             var currentRow = statement.executeQuery();
             while (currentRow.next()) {
@@ -147,7 +141,7 @@ public abstract class Dao<E extends Entity> implements IDao<E> {
             
             putId(statement, id);
             
-            System.out.println("SQL: " + statement.toString());
+            // System.out.println("SQL: " + statement.toString());
             
             var currentRow = statement.executeQuery();
             if (currentRow.next()) {

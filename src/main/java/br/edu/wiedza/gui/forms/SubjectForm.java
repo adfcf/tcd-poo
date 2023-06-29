@@ -52,8 +52,9 @@ public class SubjectForm extends javax.swing.JFrame {
         this.readOnly = readOnly;
         this.mainSubject = mainSubject;
         this.allSubjects = allSubjects;
-        setLocationRelativeTo(null);
+        
         initComponents();
+        setLocationRelativeTo(null);
         setUp();
     }
 

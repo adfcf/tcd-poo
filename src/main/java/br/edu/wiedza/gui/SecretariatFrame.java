@@ -195,9 +195,10 @@ public class SecretariatFrame extends javax.swing.JFrame {
         combReports.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jTabbedPane1.setToolTipText("");
-        jTabbedPane1.setFont(new java.awt.Font("DejaVu Sans", 0, 14)); // NOI18N
+        jTabbedPane1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         jPanel10.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -350,7 +351,7 @@ public class SecretariatFrame extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel3.setText("Nome:");
 
-        btnNewOccurrence.setFont(new java.awt.Font("DejaVu Sans", 0, 14)); // NOI18N
+        btnNewOccurrence.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnNewOccurrence.setText("Lançar");
         btnNewOccurrence.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -358,7 +359,7 @@ public class SecretariatFrame extends javax.swing.JFrame {
             }
         });
 
-        btnViewOccurrence.setFont(new java.awt.Font("DejaVu Sans", 0, 14)); // NOI18N
+        btnViewOccurrence.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnViewOccurrence.setText("Visualizar");
         btnViewOccurrence.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -366,7 +367,7 @@ public class SecretariatFrame extends javax.swing.JFrame {
             }
         });
 
-        btnEditOccurrence.setFont(new java.awt.Font("DejaVu Sans", 0, 14)); // NOI18N
+        btnEditOccurrence.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnEditOccurrence.setText("Editar");
         btnEditOccurrence.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -453,13 +454,13 @@ public class SecretariatFrame extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Ocorrências", jPanel2);
 
-        jLabel8.setFont(new java.awt.Font("DejaVu Sans", 0, 14)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel8.setText("Bem vindo:");
 
-        lblName.setFont(new java.awt.Font("DejaVu Sans", 0, 14)); // NOI18N
+        lblName.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblName.setText("-");
 
-        btnExit.setFont(new java.awt.Font("DejaVu Sans", 0, 14)); // NOI18N
+        btnExit.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnExit.setText("Sair");
         btnExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -474,15 +475,16 @@ public class SecretariatFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTabbedPane1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jTabbedPane1)
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lblName, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(120, 120, 120)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addGap(43, 43, 43))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

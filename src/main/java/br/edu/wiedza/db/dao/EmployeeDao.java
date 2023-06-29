@@ -282,7 +282,7 @@ public class EmployeeDao extends Dao<Employee> {
             
             putCredentials(statement, c);
             
-            System.out.println("SQL: " + statement.toString());
+            // System.out.println("SQL: " + statement.toString());
             
             var currentRow = statement.executeQuery();
             if (currentRow.next()) {

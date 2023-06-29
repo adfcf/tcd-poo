@@ -194,6 +194,7 @@ public class StudentForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Formulário de aluno");
+        setResizable(false);
 
         spinnerDay.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         spinnerDay.setModel(new javax.swing.SpinnerNumberModel(1, 1, 31, 1));
@@ -291,7 +292,7 @@ public class StudentForm extends javax.swing.JFrame {
         jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
         btnOk.setFont(new java.awt.Font("DejaVu Sans", 0, 14)); // NOI18N
-        btnOk.setText("Ok");
+        btnOk.setText("OK");
         btnOk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnOkActionPerformed(evt);

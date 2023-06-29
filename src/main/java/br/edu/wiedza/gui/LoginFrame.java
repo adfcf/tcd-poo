@@ -51,8 +51,8 @@ public class LoginFrame extends javax.swing.JFrame {
         
         setLocationRelativeTo(null); 
         
-        // final var icon = new javax.swing.ImageIcon(ClassLoader.getSystemResource("/logo.png"));
-        // lblLogo.setIcon(icon);
+        final var icon = new javax.swing.ImageIcon(ClassLoader.getSystemResource("resources/logo.png"));
+        lblLogo.setIcon(icon);
         
     }
     
