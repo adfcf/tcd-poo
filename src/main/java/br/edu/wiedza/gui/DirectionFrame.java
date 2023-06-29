@@ -328,7 +328,7 @@ public class DirectionFrame extends javax.swing.JFrame {
 
         btnReportLocations.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
         btnReportLocations.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconReport.png"))); // NOI18N
-        btnReportLocations.setText("<html> <p>Relatório  <br>de Locais\n </p>   <html>");
+        btnReportLocations.setText("<html> <p>Relatório  <br>de Instalações\n </p>   <html>");
         btnReportLocations.setEnabled(false);
         btnReportLocations.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

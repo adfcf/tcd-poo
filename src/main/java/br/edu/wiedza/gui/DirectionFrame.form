@@ -225,7 +225,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/IconReport.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="&lt;html&gt; &lt;p&gt;Relat&#xf3;rio  &lt;br&gt;de Locais&#xa; &lt;/p&gt;   &lt;html&gt;"/>
+                <Property name="text" type="java.lang.String" value="&lt;html&gt; &lt;p&gt;Relat&#xf3;rio  &lt;br&gt;de Instala&#xe7;&#xf5;es&#xa; &lt;/p&gt;   &lt;html&gt;"/>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
