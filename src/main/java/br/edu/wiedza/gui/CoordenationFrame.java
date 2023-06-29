@@ -78,6 +78,8 @@ public class CoordenationFrame extends javax.swing.JFrame {
 
         listSubjects.setModel(s1);
         listCourses.setModel(s2);
+         btnReportCourses.setEnabled(true);
+         btnReportSubject.setEnabled(true);
 
     }
 

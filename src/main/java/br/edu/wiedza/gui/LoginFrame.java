@@ -140,6 +140,8 @@ public class LoginFrame extends javax.swing.JFrame {
         lblStatus.setForeground(new java.awt.Color(133, 133, 0));
         lblStatus.setText("Conectando-se ao banco de dados...");
 
+        lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/logo.png"))); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
