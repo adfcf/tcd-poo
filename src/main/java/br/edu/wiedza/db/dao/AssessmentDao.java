@@ -89,7 +89,7 @@ public class AssessmentDao extends Dao<Assessment> {
 
         rawStatement.append(" (class_id");
         rawStatement.append(", name");
-        rawStatement.append(", value");
+        rawStatement.append(", value)");
 
 
         rawStatement.append("VALUES (?, ?, ?);");
