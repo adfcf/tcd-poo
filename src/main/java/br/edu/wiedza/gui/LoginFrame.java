@@ -209,7 +209,7 @@ public class LoginFrame extends javax.swing.JFrame {
         final var sector = e.getSector();
         switch (sector) {
             case SECRETARIAT -> new SecretariatFrame().setVisible(true);
-            case COORDENATION -> new CoordenationFrame().setVisible(true);
+            case COORDENATION -> new CoordenationFrame(e).setVisible(true);
             case DIRECTION -> new DirectionFrame(e).setVisible(true);
             case TEACHING -> new TeachingFrame().setVisible(true);
             default -> JOptionPane.showMessageDialog(
