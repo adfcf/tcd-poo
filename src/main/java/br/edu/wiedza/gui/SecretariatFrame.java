@@ -36,13 +36,13 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.Normalizer;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -138,16 +138,22 @@ public class SecretariatFrame extends javax.swing.JFrame {
     
     private void makeReports(String reportName){
         
-        try(InputStream in = getClass().getResourceAsStream("/" + reportName.concat(".jasper"))){
+        try(InputStream in = getClass().getResourceAsStream(reportName)){
         
             JasperPrint jasperPrint = JasperFillManager.fillReport(in, null, Database.getConnection());
             
             JasperViewer jasperViewer = new JasperViewer(jasperPrint, false);
+            
+            JDialog dialog = new JDialog(this);
+            dialog.setContentPane(jasperViewer.getContentPane());
+            dialog.setSize(jasperViewer.getSize());
+            dialog.setTitle(reportName);
+            dialog.setModal(true);
+            dialog.setVisible(true);
+            
         }catch(IOException | JRException ex){
             Logger.getLogger(SecretariatFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
     }
 
     /**
@@ -174,6 +180,7 @@ public class SecretariatFrame extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         listStudents = new javax.swing.JList<>();
         txtSearchStudent = new javax.swing.JTextField();
+        btnGenerateGradesReport = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -199,6 +206,7 @@ public class SecretariatFrame extends javax.swing.JFrame {
         jTabbedPane1.setFont(new java.awt.Font("DejaVu Sans", 0, 14)); // NOI18N
 
         jPanel5.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel5.setFocusable(false);
 
         lblReports.setFont(new java.awt.Font("DejaVu Sans", 0, 14)); // NOI18N
         lblReports.setText("Relatório a ser gerado:");
@@ -296,6 +304,13 @@ public class SecretariatFrame extends javax.swing.JFrame {
             }
         });
 
+        btnGenerateGradesReport.setText("jButton1");
+        btnGenerateGradesReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerateGradesReportActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
@@ -313,7 +328,8 @@ public class SecretariatFrame extends javax.swing.JFrame {
                         .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnEditStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnNewStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnViewStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(btnViewStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnGenerateGradesReport, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(38, 38, 38))
         );
         jPanel10Layout.setVerticalGroup(
@@ -331,6 +347,8 @@ public class SecretariatFrame extends javax.swing.JFrame {
                         .addComponent(btnEditStudent)
                         .addGap(18, 18, 18)
                         .addComponent(btnViewStudent)
+                        .addGap(28, 28, 28)
+                        .addComponent(btnGenerateGradesReport)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE))
                 .addContainerGap())
@@ -522,25 +540,19 @@ public class SecretariatFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnViewStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewStudentActionPerformed
+    private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
+        dispose();
+        LoginFrame lf = new LoginFrame();
+        lf.setVisible(true);
+        lf.start();
+    }//GEN-LAST:event_btnExitActionPerformed
 
-        final Student selectedStudent = getSelectedStudent();
+    private void btnEditOccurrenceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditOccurrenceActionPerformed
 
-        if (selectedStudent != null) {
-            new StudentForm(selectedStudent, true).setVisible(true);
-        } else {
-            Util.disableAll(btnViewStudent, btnEditStudent);
-            JOptionPane.showMessageDialog(this, "Por favor, selecione um aluno para editá-lo ou visualizá-lo.");
-        }
-    }//GEN-LAST:event_btnViewStudentActionPerformed
+        final var selectedOccurrence = getSelectedOccurrence();
 
-    private void btnEditStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditStudentActionPerformed
-
-        final Student selectedStudent = getSelectedStudent();
-
-        if (selectedStudent != null) {
-
-            var form = new StudentForm(selectedStudent, false);
+        if (selectedOccurrence != null) {
+            var form = new OccurrenceForm(selectedOccurrence, allStudents, false);
             form.setVisible(true);
             form.addWindowListener(new WindowAdapter() {
                 @Override
@@ -549,14 +561,24 @@ public class SecretariatFrame extends javax.swing.JFrame {
                 }
             });
         } else {
-            Util.disableAll(btnViewStudent, btnEditStudent);
-            JOptionPane.showMessageDialog(this, "Por favor, selecione um aluno para editá-lo ou visualizá-lo.");
+            Util.disableAll(btnViewOccurrence, btnEditOccurrence);
+            JOptionPane.showMessageDialog(this, "Por favor, selecione uma ocorrência para editá-la ou visualizá-la.");
         }
-    }//GEN-LAST:event_btnEditStudentActionPerformed
+    }//GEN-LAST:event_btnEditOccurrenceActionPerformed
 
-    private void btnNewStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewStudentActionPerformed
+    private void btnViewOccurrenceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewOccurrenceActionPerformed
+        final var selectedOccurrence = getSelectedOccurrence();
 
-        var form = new StudentForm(null, false);
+        if (selectedOccurrence != null) {
+            new OccurrenceForm(selectedOccurrence, allStudents, true).setVisible(true);
+        } else {
+            Util.disableAll(btnViewOccurrence, btnEditOccurrence);
+            JOptionPane.showMessageDialog(this, "Por favor, selecione uma ocorrência para editá-la ou visualizá-la.");
+        }
+    }//GEN-LAST:event_btnViewOccurrenceActionPerformed
+
+    private void btnNewOccurrenceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewOccurrenceActionPerformed
+        var form = new OccurrenceForm(null, allStudents, false);
         form.setVisible(true);
         form.addWindowListener(new WindowAdapter() {
             @Override
@@ -564,35 +586,7 @@ public class SecretariatFrame extends javax.swing.JFrame {
                 updateEntities();
             }
         });
-    }//GEN-LAST:event_btnNewStudentActionPerformed
-
-    private void listStudentsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listStudentsValueChanged
-
-        Util.enableAll(btnViewStudent, btnEditStudent);
-    }//GEN-LAST:event_listStudentsValueChanged
-
-    private void txtSearchStudentKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchStudentKeyReleased
-
-        final var searchTerm = txtSearchStudent.getText();
-
-        var searchedStudents = new DefaultListModel<String>();
-
-        allStudents.stream().forEach(s -> {
-            String studentName = s.getName().toLowerCase();
-            if (studentName.contains(searchTerm.toLowerCase())) {
-                searchedStudents.addElement(s.getName());
-            }
-        });
-
-        listStudents.setModel(searchedStudents);
-    }//GEN-LAST:event_txtSearchStudentKeyReleased
-
-    private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
-        dispose();
-        LoginFrame lf = new LoginFrame();
-        lf.setVisible(true);
-        lf.start();
-    }//GEN-LAST:event_btnExitActionPerformed
+    }//GEN-LAST:event_btnNewOccurrenceActionPerformed
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
 
@@ -622,8 +616,40 @@ public class SecretariatFrame extends javax.swing.JFrame {
         listOccurrences.setModel(searchedOccurrences);
     }//GEN-LAST:event_btnSearchActionPerformed
 
-    private void btnNewOccurrenceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewOccurrenceActionPerformed
-        var form = new OccurrenceForm(null, allStudents, false);
+    private void listOccurrencesValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listOccurrencesValueChanged
+
+        Util.enableAll(btnViewOccurrence, btnEditOccurrence);
+    }//GEN-LAST:event_listOccurrencesValueChanged
+
+    private void btnGenerateGradesReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateGradesReportActionPerformed
+
+        makeReports("/Grades.jasper");
+    }//GEN-LAST:event_btnGenerateGradesReportActionPerformed
+
+    private void txtSearchStudentKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchStudentKeyReleased
+
+        final var searchTerm = txtSearchStudent.getText();
+
+        var searchedStudents = new DefaultListModel<String>();
+
+        allStudents.stream().forEach(s -> {
+            String studentName = s.getName().toLowerCase();
+            if (studentName.contains(searchTerm.toLowerCase())) {
+                searchedStudents.addElement(s.getName());
+            }
+        });
+
+        listStudents.setModel(searchedStudents);
+    }//GEN-LAST:event_txtSearchStudentKeyReleased
+
+    private void listStudentsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listStudentsValueChanged
+
+        Util.enableAll(btnViewStudent, btnEditStudent);
+    }//GEN-LAST:event_listStudentsValueChanged
+
+    private void btnNewStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewStudentActionPerformed
+
+        var form = new StudentForm(null, false);
         form.setVisible(true);
         form.addWindowListener(new WindowAdapter() {
             @Override
@@ -631,25 +657,15 @@ public class SecretariatFrame extends javax.swing.JFrame {
                 updateEntities();
             }
         });
-    }//GEN-LAST:event_btnNewOccurrenceActionPerformed
+    }//GEN-LAST:event_btnNewStudentActionPerformed
 
-    private void btnViewOccurrenceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewOccurrenceActionPerformed
-        final var selectedOccurrence = getSelectedOccurrence();
+    private void btnEditStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditStudentActionPerformed
 
-        if (selectedOccurrence != null) {
-            new OccurrenceForm(selectedOccurrence, allStudents, true).setVisible(true);
-        } else {
-            Util.disableAll(btnViewOccurrence, btnEditOccurrence);
-            JOptionPane.showMessageDialog(this, "Por favor, selecione uma ocorrência para editá-la ou visualizá-la.");
-        }
-    }//GEN-LAST:event_btnViewOccurrenceActionPerformed
+        final Student selectedStudent = getSelectedStudent();
 
-    private void btnEditOccurrenceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditOccurrenceActionPerformed
+        if (selectedStudent != null) {
 
-        final var selectedOccurrence = getSelectedOccurrence();
-
-        if (selectedOccurrence != null) {
-            var form = new OccurrenceForm(selectedOccurrence, allStudents, false);
+            var form = new StudentForm(selectedStudent, false);
             form.setVisible(true);
             form.addWindowListener(new WindowAdapter() {
                 @Override
@@ -658,22 +674,28 @@ public class SecretariatFrame extends javax.swing.JFrame {
                 }
             });
         } else {
-            Util.disableAll(btnViewOccurrence, btnEditOccurrence);
-            JOptionPane.showMessageDialog(this, "Por favor, selecione uma ocorrência para editá-la ou visualizá-la.");
+            Util.disableAll(btnViewStudent, btnEditStudent);
+            JOptionPane.showMessageDialog(this, "Por favor, selecione um aluno para editá-lo ou visualizá-lo.");
         }
-    }//GEN-LAST:event_btnEditOccurrenceActionPerformed
+    }//GEN-LAST:event_btnEditStudentActionPerformed
 
-    private void listOccurrencesValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listOccurrencesValueChanged
+    private void btnViewStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewStudentActionPerformed
 
-        Util.enableAll(btnViewOccurrence, btnEditOccurrence);
-    }//GEN-LAST:event_listOccurrencesValueChanged
+        final Student selectedStudent = getSelectedStudent();
+
+        if (selectedStudent != null) {
+            new StudentForm(selectedStudent, true).setVisible(true);
+        } else {
+            Util.disableAll(btnViewStudent, btnEditStudent);
+            JOptionPane.showMessageDialog(this, "Por favor, selecione um aluno para editá-lo ou visualizá-lo.");
+        }
+    }//GEN-LAST:event_btnViewStudentActionPerformed
 
     private void btnGenerateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateActionPerformed
 
         final String selectedReport = combReports.getItemAt(combReports.getSelectedIndex());
 
         makeReports(selectedReport);
-        
     }//GEN-LAST:event_btnGenerateActionPerformed
 
 
@@ -682,6 +704,7 @@ public class SecretariatFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnEditStudent;
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnGenerate;
+    private javax.swing.JButton btnGenerateGradesReport;
     private javax.swing.JButton btnNewOccurrence;
     private javax.swing.JButton btnNewStudent;
     private javax.swing.JButton btnSearch;
