@@ -23,6 +23,19 @@
  */
 package br.edu.wiedza.gui;
 
+import br.edu.wiedza.db.dao.CourseDao;
+import br.edu.wiedza.db.dao.SubjectDao;
+import br.edu.wiedza.entities.classroom.Course;
+import br.edu.wiedza.entities.classroom.Subject;
+import br.edu.wiedza.entities.persons.Employee;
+import br.edu.wiedza.gui.forms.CourseForm;
+import br.edu.wiedza.gui.forms.SubjectForm;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.time.LocalDate;
+import java.util.List;
+import javax.swing.DefaultListModel;
+
 /**
  *
  * @author adfcf
@@ -32,9 +45,40 @@ public class CoordenationFrame extends javax.swing.JFrame {
     /**
      * Creates new form CoordenationFrame
      */
-    public CoordenationFrame() {
+    private List<Subject> allSubjects;
+    private List<Course> allCourses;
+
+    public CoordenationFrame(Employee user) {
         initComponents();
+        lblName.setText(user.getName());
+        allCourses = CourseDao.getInstance().retrieveAll();
         setLocationRelativeTo(null);
+        
+
+        updateEntities();
+    }
+
+    private void updateEntities() {
+        
+     
+        listSubjects.setModel(new DefaultListModel<>());
+        allSubjects = SubjectDao.getInstance().retrieveAll();
+
+        final var s1 = new DefaultListModel<String>();
+        for (int i = 0; i < allSubjects.size(); ++i) {
+            s1.add(i, allSubjects.get(i).getCode());
+        }
+        allCourses = CourseDao.getInstance().retrieveAll();
+        listCourses.setModel(new DefaultListModel<>());
+
+        final var s2 = new DefaultListModel<String>();
+        for (int i = 0; i < allCourses.size(); ++i) {
+            s2.add(i, allCourses.get(i).getSubject().getCode());
+        }
+
+        listSubjects.setModel(s1);
+        listCourses.setModel(s2);
+
     }
 
     /**
@@ -47,47 +91,59 @@ public class CoordenationFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         groupCourseYear = new javax.swing.ButtonGroup();
-        tabbedPane = new javax.swing.JTabbedPane();
+        tPane = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        listLocations = new javax.swing.JList<>();
-        btnNewLocation = new javax.swing.JButton();
-        btnViewLocation = new javax.swing.JButton();
-        btnEditLocation = new javax.swing.JButton();
+        listSubjects = new javax.swing.JList<>();
+        btnNewSubject = new javax.swing.JButton();
+        btnViewSubject = new javax.swing.JButton();
+        btnEditSubject = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        listEmployees = new javax.swing.JList<>();
-        btnNewEmployee = new javax.swing.JButton();
-        btnViewEmployee = new javax.swing.JButton();
-        btnEditEmployee = new javax.swing.JButton();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jTextField1 = new javax.swing.JTextField();
+        listCourses = new javax.swing.JList<>();
+        btnNewCourse = new javax.swing.JButton();
+        btnViewCourse = new javax.swing.JButton();
+        btnEditCourse = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         lblName = new javax.swing.JLabel();
-        btnNewLocation1 = new javax.swing.JButton();
+        btnExit = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        listLocations.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        listLocations.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        listLocations.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+        listSubjects.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        listSubjects.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        listSubjects.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                listLocationsValueChanged(evt);
+                listSubjectsValueChanged(evt);
             }
         });
-        jScrollPane2.setViewportView(listLocations);
+        jScrollPane2.setViewportView(listSubjects);
 
-        btnNewLocation.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnNewLocation.setText("Cadastrar");
+        btnNewSubject.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnNewSubject.setText("Cadastrar");
+        btnNewSubject.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNewSubjectActionPerformed(evt);
+            }
+        });
 
-        btnViewLocation.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnViewLocation.setText("Visualizar");
-        btnViewLocation.setEnabled(false);
+        btnViewSubject.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnViewSubject.setText("Visualizar");
+        btnViewSubject.setEnabled(false);
+        btnViewSubject.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewSubjectActionPerformed(evt);
+            }
+        });
 
-        btnEditLocation.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnEditLocation.setText("Editar");
-        btnEditLocation.setEnabled(false);
+        btnEditSubject.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnEditSubject.setText("Editar");
+        btnEditSubject.setEnabled(false);
+        btnEditSubject.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditSubjectActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -98,9 +154,9 @@ public class CoordenationFrame extends javax.swing.JFrame {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnNewLocation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnViewLocation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnEditLocation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnNewSubject, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnViewSubject, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnEditSubject, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -110,82 +166,76 @@ public class CoordenationFrame extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(btnNewLocation)
+                        .addComponent(btnNewSubject)
                         .addGap(18, 18, 18)
-                        .addComponent(btnViewLocation)
+                        .addComponent(btnViewSubject)
                         .addGap(18, 18, 18)
-                        .addComponent(btnEditLocation)))
+                        .addComponent(btnEditSubject)))
                 .addContainerGap(7, Short.MAX_VALUE))
         );
 
-        tabbedPane.addTab("Disciplinas", jPanel2);
+        tPane.addTab("Disciplinas", jPanel2);
 
-        listEmployees.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        listEmployees.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jScrollPane1.setViewportView(listEmployees);
+        listCourses.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        listCourses.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane1.setViewportView(listCourses);
 
-        btnNewEmployee.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnNewEmployee.setText("Cadastrar");
+        btnNewCourse.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnNewCourse.setText("Cadastrar");
+        btnNewCourse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNewCourseActionPerformed(evt);
+            }
+        });
 
-        btnViewEmployee.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnViewEmployee.setText("Visualizar");
+        btnViewCourse.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnViewCourse.setText("Visualizar");
+        btnViewCourse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewCourseActionPerformed(evt);
+            }
+        });
 
-        btnEditEmployee.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnEditEmployee.setText("Editar");
-
-        jRadioButton1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jRadioButton1.setText("Ano atual");
-
-        jRadioButton2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jRadioButton2.setText("Ano específico:");
-
-        jTextField1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextField1.setText("2022");
-        jTextField1.setEnabled(false);
+        btnEditCourse.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnEditCourse.setText("Editar");
+        btnEditCourse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditCourseActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jRadioButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jRadioButton2))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(9, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnViewEmployee, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnNewEmployee)
-                    .addComponent(btnEditEmployee, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(15, Short.MAX_VALUE))
+                    .addComponent(btnNewCourse)
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(btnEditCourse, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnViewCourse, javax.swing.GroupLayout.Alignment.LEADING)))
+                .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
+                .addGap(34, 34, 34)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(btnNewEmployee)
+                        .addComponent(btnNewCourse)
                         .addGap(18, 18, 18)
-                        .addComponent(btnViewEmployee)
+                        .addComponent(btnViewCourse)
                         .addGap(18, 18, 18)
-                        .addComponent(btnEditEmployee)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE)
-                        .addContainerGap())))
+                        .addComponent(btnEditCourse)
+                        .addGap(104, 104, 104))
+                    .addComponent(jScrollPane1))
+                .addGap(47, 47, 47))
         );
 
-        tabbedPane.addTab("Ofertas", jPanel4);
+        tPane.addTab("Ofertas", jPanel4);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel1.setText("Bem vindo(a),");
@@ -193,8 +243,13 @@ public class CoordenationFrame extends javax.swing.JFrame {
         lblName.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblName.setText("-");
 
-        btnNewLocation1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnNewLocation1.setText("Sair");
+        btnExit.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnExit.setText("Sair");
+        btnExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExitActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -203,59 +258,158 @@ public class CoordenationFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(17, 17, 17)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tPane, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblName, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnNewLocation1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(12, Short.MAX_VALUE)
-                .addComponent(tabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tPane, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel1)
                         .addComponent(lblName))
-                    .addComponent(btnNewLocation1))
+                    .addComponent(btnExit))
                 .addGap(13, 13, 13))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void listLocationsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listLocationsValueChanged
+    private void listSubjectsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listSubjectsValueChanged
 
-        btnViewLocation.setEnabled(true);
-        btnNewLocation.setEnabled(true);
-        btnEditLocation.setEnabled(true);
-    }//GEN-LAST:event_listLocationsValueChanged
+        btnViewSubject.setEnabled(true);
+        btnNewSubject.setEnabled(true);
+        btnEditSubject.setEnabled(true);
+    }//GEN-LAST:event_listSubjectsValueChanged
 
+    Subject findSubjetcByCode(String Code) {
+        for (int i = 0; i < allSubjects.size(); ++i) {
+            if (Code.equals(allSubjects.get(i).getCode().intern())) {
+                return allSubjects.get(i);
+            }
+        }
+        return null;
+    }
+
+    private Course getSelectedCourse() {
+        String subject = listCourses.getSelectedValue();
+        System.out.println(subject);
+        for (int i = 0; i < allCourses.size(); ++i) {
+            if (subject.equals(allCourses.get(i).getSubject().getCode().intern())) {
+                System.out.println(allCourses.get(i).getSubject().getCode());
+                return allCourses.get(i);
+            }
+        }
+        return null;
+    }
+
+    private Subject getSelectedSubject() {
+        String code = listSubjects.getSelectedValue();
+        return findSubjetcByCode(code);
+    }
+
+
+    private void btnNewSubjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewSubjectActionPerformed
+
+        final var form = new SubjectForm(null, false, allSubjects);
+        form.setVisible(true);
+        form.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                updateEntities();
+            }
+        });
+
+    }//GEN-LAST:event_btnNewSubjectActionPerformed
+
+    private void btnViewSubjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewSubjectActionPerformed
+        Subject s = getSelectedSubject();
+        new SubjectForm(s, true, allSubjects).setVisible(true);
+    }//GEN-LAST:event_btnViewSubjectActionPerformed
+
+    private void btnEditSubjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditSubjectActionPerformed
+        Subject s = getSelectedSubject();
+        final var form = new SubjectForm(s, false, allSubjects);
+        form.setVisible(true);
+        form.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                updateEntities();
+            }
+        });
+    }//GEN-LAST:event_btnEditSubjectActionPerformed
+
+    private void btnNewCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewCourseActionPerformed
+
+        final var form = new CourseForm(null, false, allSubjects);
+        form.setVisible(true);
+        form.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                updateEntities();
+            }
+        });
+    }//GEN-LAST:event_btnNewCourseActionPerformed
+
+    private void btnViewCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewCourseActionPerformed
+        Course e = getSelectedCourse();
+        final var form = new CourseForm(e, true, allSubjects);
+        form.setVisible(true);
+    }//GEN-LAST:event_btnViewCourseActionPerformed
+
+    private void btnEditCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditCourseActionPerformed
+        Course e = getSelectedCourse();
+        final var form = new CourseForm(e, false, allSubjects);
+        form.setVisible(true);
+        form.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                updateEntities();
+            }
+        });
+    }//GEN-LAST:event_btnEditCourseActionPerformed
+
+    private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
+        dispose();
+        LoginFrame lf = new LoginFrame();
+        lf.setVisible(true);
+        lf.start();
+    }//GEN-LAST:event_btnExitActionPerformed
+    private void setCourseListByYear(int year) {
+        final var s2 = new DefaultListModel<String>();
+        for (int i = 0; i < allCourses.size(); ++i) {
+            if (allCourses.get(i).getYear() == year) {
+                s2.add(i, allCourses.get(i).getSubject().getCode());
+            }
+        }
+        listCourses.setModel(s2);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnEditEmployee;
-    private javax.swing.JButton btnEditLocation;
-    private javax.swing.JButton btnNewEmployee;
-    private javax.swing.JButton btnNewLocation;
-    private javax.swing.JButton btnNewLocation1;
-    private javax.swing.JButton btnViewEmployee;
-    private javax.swing.JButton btnViewLocation;
+    private javax.swing.JButton btnEditCourse;
+    private javax.swing.JButton btnEditSubject;
+    private javax.swing.JButton btnExit;
+    private javax.swing.JButton btnNewCourse;
+    private javax.swing.JButton btnNewSubject;
+    private javax.swing.JButton btnViewCourse;
+    private javax.swing.JButton btnViewSubject;
     private javax.swing.ButtonGroup groupCourseYear;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblName;
-    private javax.swing.JList<String> listEmployees;
-    private javax.swing.JList<String> listLocations;
-    private javax.swing.JTabbedPane tabbedPane;
+    private javax.swing.JList<String> listCourses;
+    private javax.swing.JList<String> listSubjects;
+    private javax.swing.JTabbedPane tPane;
     // End of variables declaration//GEN-END:variables
 }
