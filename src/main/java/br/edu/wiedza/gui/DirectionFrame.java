@@ -23,6 +23,7 @@
  */
 package br.edu.wiedza.gui;
 
+import br.edu.wiedza.db.Database;
 import br.edu.wiedza.gui.forms.LocationForm;
 import br.edu.wiedza.db.dao.EmployeeDao;
 import br.edu.wiedza.db.dao.LocationDao;
@@ -31,9 +32,18 @@ import br.edu.wiedza.entities.persons.Employee;
 import br.edu.wiedza.gui.forms.EmployeeForm;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -71,7 +81,8 @@ public class DirectionFrame extends javax.swing.JFrame {
     }
     
     private void updateEntities() {
-        
+        btnReportEmployee.setEnabled(true);
+        btnReportLocations.setEnabled(true);
         listLocations.setModel(new DefaultListModel<>());
         listEmployees.setModel(new DefaultListModel<>());
         
@@ -223,6 +234,7 @@ public class DirectionFrame extends javax.swing.JFrame {
         btnNewLocation = new javax.swing.JButton();
         btnViewLocation = new javax.swing.JButton();
         btnEditLocation = new javax.swing.JButton();
+        btnReportLocations = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         checkOtherCost = new javax.swing.JCheckBox();
         checkLocationCosts = new javax.swing.JCheckBox();
@@ -243,6 +255,7 @@ public class DirectionFrame extends javax.swing.JFrame {
         btnNewEmployee = new javax.swing.JButton();
         btnViewEmployee = new javax.swing.JButton();
         btnEditEmployee = new javax.swing.JButton();
+        btnReportEmployee = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         lblName = new javax.swing.JLabel();
         btnExit = new javax.swing.JButton();
@@ -313,6 +326,16 @@ public class DirectionFrame extends javax.swing.JFrame {
             }
         });
 
+        btnReportLocations.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
+        btnReportLocations.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconReport.png"))); // NOI18N
+        btnReportLocations.setText("<html> <p>Relatório  <br>de Locais\n </p>   <html>");
+        btnReportLocations.setEnabled(false);
+        btnReportLocations.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReportLocationsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -325,7 +348,8 @@ public class DirectionFrame extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(btnEditLocation, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
                         .addComponent(btnViewLocation, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE))
-                    .addComponent(btnNewLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnNewLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnReportLocations, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(17, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -339,7 +363,9 @@ public class DirectionFrame extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(btnViewLocation)
                         .addGap(18, 18, 18)
-                        .addComponent(btnEditLocation)))
+                        .addComponent(btnEditLocation)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnReportLocations, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(38, Short.MAX_VALUE))
         );
 
@@ -512,6 +538,16 @@ public class DirectionFrame extends javax.swing.JFrame {
             }
         });
 
+        btnReportEmployee.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
+        btnReportEmployee.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconReport.png"))); // NOI18N
+        btnReportEmployee.setText("<html> <p>Relatório  <br>de Funcionários\n </p>   <html>");
+        btnReportEmployee.setEnabled(false);
+        btnReportEmployee.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReportEmployeeActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -523,7 +559,8 @@ public class DirectionFrame extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnEditEmployee, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnViewEmployee, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnNewEmployee, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnNewEmployee, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnReportEmployee, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(17, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
@@ -537,7 +574,9 @@ public class DirectionFrame extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(btnViewEmployee)
                         .addGap(18, 18, 18)
-                        .addComponent(btnEditEmployee)))
+                        .addComponent(btnEditEmployee)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnReportEmployee, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(38, Short.MAX_VALUE))
         );
 
@@ -719,10 +758,36 @@ public class DirectionFrame extends javax.swing.JFrame {
             }
         });
     }//GEN-LAST:event_btnNewEmployeeActionPerformed
+    private void makeReports(String reportName) {
 
+        try (InputStream in = getClass().getResourceAsStream(reportName)) {
+
+            JasperPrint jasperPrint = JasperFillManager.fillReport(in, null, Database.getConnection());
+
+            JasperViewer jasperViewer = new JasperViewer(jasperPrint, false);
+
+            JDialog dialog = new JDialog(this);
+            dialog.setContentPane(jasperViewer.getContentPane());
+            dialog.setSize(jasperViewer.getSize());
+            dialog.setTitle(reportName);
+            dialog.setModal(true);
+            dialog.setVisible(true);
+
+        } catch (IOException | JRException ex) {
+            Logger.getLogger(SecretariatFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     private void listLocationsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listLocationsValueChanged
         Util.enableAll(btnViewLocation, btnEditLocation);
     }//GEN-LAST:event_listLocationsValueChanged
+
+    private void btnReportLocationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportLocationsActionPerformed
+        makeReports("/Locationreports.jasper");
+    }//GEN-LAST:event_btnReportLocationsActionPerformed
+
+    private void btnReportEmployeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportEmployeeActionPerformed
+        makeReports("/employeesReport.jasper");
+    }//GEN-LAST:event_btnReportEmployeeActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -731,6 +796,8 @@ public class DirectionFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnNewEmployee;
     private javax.swing.JButton btnNewLocation;
+    private javax.swing.JButton btnReportEmployee;
+    private javax.swing.JButton btnReportLocations;
     private javax.swing.JButton btnViewEmployee;
     private javax.swing.JButton btnViewLocation;
     private javax.swing.JCheckBox checkCoordenationCost;
