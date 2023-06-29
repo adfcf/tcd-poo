@@ -76,7 +76,7 @@ public class StudentForm extends javax.swing.JFrame {
             txtStreet1.setEditable(false);
             txtDistrict1.setEditable(false);
             txtNumber1.setEditable(false);
-            txtCep.setEditable(false);
+            txtCep1.setEditable(false);
             
             txtCpf.setEditable(false);
             
@@ -192,7 +192,8 @@ public class StudentForm extends javax.swing.JFrame {
 
         txtStreet.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Formulário de aluno");
 
         spinnerDay.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         spinnerDay.setModel(new javax.swing.SpinnerNumberModel(1, 1, 31, 1));
@@ -358,8 +359,7 @@ public class StudentForm extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtSecondaryPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblPrimaryPhone))))
-                        .addGap(0, 0, 0))
+                                    .addComponent(lblPrimaryPhone)))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(31, 31, 31)
                         .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
