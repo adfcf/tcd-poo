@@ -151,17 +151,17 @@ public class OccurrenceForm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Fomulário de ocorrência");
 
-        lblEnrollment.setFont(new java.awt.Font("DejaVu Sans", 0, 14)); // NOI18N
+        lblEnrollment.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblEnrollment.setText("Matrícula do aluno:");
 
-        txtEnrollment.setFont(new java.awt.Font("DejaVu Sans", 0, 14)); // NOI18N
+        txtEnrollment.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtEnrollment.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtEnrollmentFocusLost(evt);
             }
         });
 
-        lblDate.setFont(new java.awt.Font("DejaVu Sans", 0, 14)); // NOI18N
+        lblDate.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblDate.setText("Data da ocorrência:");
 
         spinnerDay.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -174,14 +174,14 @@ public class OccurrenceForm extends javax.swing.JFrame {
         spinnerYear.setModel(new javax.swing.SpinnerNumberModel(2005, 1923, 2005, 1));
 
         txtDescription.setColumns(20);
-        txtDescription.setFont(new java.awt.Font("DejaVu Sans", 0, 14)); // NOI18N
+        txtDescription.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtDescription.setRows(5);
         jScrollPane1.setViewportView(txtDescription);
 
-        lblDescription.setFont(new java.awt.Font("DejaVu Sans", 0, 14)); // NOI18N
+        lblDescription.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblDescription.setText("Descrição:");
 
-        btnOk.setFont(new java.awt.Font("DejaVu Sans", 0, 14)); // NOI18N
+        btnOk.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnOk.setText("Ok");
         btnOk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
