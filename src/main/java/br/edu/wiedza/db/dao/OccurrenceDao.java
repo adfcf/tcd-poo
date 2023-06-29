@@ -24,7 +24,10 @@
 package br.edu.wiedza.db.dao;
 
 import br.edu.wiedza.entities.Occurrence;
-import java.sql.Date;
+import br.edu.wiedza.entities.persons.Credentials;
+import br.edu.wiedza.entities.persons.Student;
+import br.edu.wiedza.entities.persons.components.Address;
+import br.edu.wiedza.entities.persons.components.Cpf;
 import java.sql.JDBCType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -98,12 +101,23 @@ public class OccurrenceDao extends Dao<Occurrence>{
 
     @Override
     protected String getRetrieveAllStatement() {
-        return "SELECT * FROM " + TABLE_NAME + ";";
+        return "SELECT * FROM "
+                + TABLE_NAME
+                + " INNER JOIN " + StudentDao.TABLE_NAME
+                + " ON " + TABLE_NAME + ".student_id = " + StudentDao.TABLE_NAME + ".id"
+                + " INNER JOIN " + CredentialsDao.TABLE_NAME
+                + " ON " + StudentDao.TABLE_NAME + ".credentials_id = " + CredentialsDao.TABLE_NAME + ".id;";
     }
 
     @Override
     protected String getFindByIdStatement() {
-        return "SELECT * FROM " + TABLE_NAME + " WHERE id=?;";
+        return "SELECT * FROM "
+                + TABLE_NAME
+                + " INNER JOIN " + StudentDao.TABLE_NAME
+                + " ON " + TABLE_NAME + ".student_id = " + StudentDao.TABLE_NAME + ".id"
+                + " INNER JOIN " + CredentialsDao.TABLE_NAME
+                + " ON " + StudentDao.TABLE_NAME + ".credentials_id = " + CredentialsDao.TABLE_NAME + ".id"
+                + " WHERE id = ?;";
     }
 
     @Override
@@ -141,12 +155,33 @@ public class OccurrenceDao extends Dao<Occurrence>{
         try {
             
             var id = resultSet.getInt(1);
-            
-            var student = StudentDao.getInstance().findById(resultSet.getInt(2)).get();
-            
+                        
             var date = resultSet.getDate(3).toLocalDate();
             
             var description = resultSet.getString(4);
+            
+            final int studentId = resultSet.getInt(5);
+                        
+            final var name = resultSet.getString(7);
+            final var dateOfBirth = resultSet.getDate(8).toLocalDate();
+            final var cpf = new Cpf(resultSet.getLong(9));
+            final var address = new Address(
+                    resultSet.getInt(13), 
+                    resultSet.getString(12),
+                    resultSet.getString(11), 
+                    resultSet.getString(10));
+            
+            final long primaryPhoneNumber = resultSet.getLong(14);
+            final long secondaryPhoneNumber = resultSet.getLong(15);
+            final boolean active = resultSet.getBoolean(16);
+            
+            final var credentialsId = resultSet.getInt(17);
+            final var userName = resultSet.getString(18);
+            final var password = resultSet.getString(19); 
+            
+            final var credentials = new Credentials(credentialsId, userName, password);
+            
+            final var student = new Student(studentId, credentials, name, dateOfBirth, cpf, address, primaryPhoneNumber, secondaryPhoneNumber, active);
             
             o = new Occurrence(student, date, description, id);
         } catch (SQLException ex) {
