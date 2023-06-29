@@ -1,0 +1,295 @@
+/*
+ * The MIT License
+ *
+ * Copyright 2023 Ivanderlei Filho &lt;imsf@aluno.ifnmg.edu.br&gt;.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package br.edu.wiedza.gui.forms;
+
+import br.edu.wiedza.db.dao.CourseDao;
+import br.edu.wiedza.db.dao.EmployeeDao;
+import br.edu.wiedza.entities.classroom.Course;
+import br.edu.wiedza.entities.classroom.Subject;
+import br.edu.wiedza.entities.persons.Employee;
+import br.edu.wiedza.entities.persons.Employee.Sector;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+
+/**
+ *
+ * @author Ivanderlei Filho &lt;imsf@aluno.ifnmg.edu.br&gt;
+ */
+public class CourseForm extends javax.swing.JFrame {
+     private final  List<Subject> allSubjects;
+     private List<Employee> allEmployee;
+     private final boolean readOnly;
+     private final Course course;
+     
+    /**
+     * Creates new form OfferingFrame
+     * @param e
+     * @param readOnly
+     * @param allSubjects
+     */
+    public CourseForm(Course e,boolean readOnly,List<Subject> allSubjects ){
+        this.readOnly = readOnly;
+        this.course = e;
+        this.allSubjects = allSubjects;
+        initComponents();
+        set();
+        setLocationRelativeTo(null);
+        
+    }
+
+
+    
+    private void setSubjects() {
+        final var s1 = new DefaultComboBoxModel<String>();
+        for (int i = 0; i < allSubjects.size(); ++i) {
+            s1.addElement(allSubjects.get(i).getCode());
+        }
+        comboSubjectCode.setModel(s1);
+    }
+    
+    private void setTeachers(){
+        allEmployee = EmployeeDao.getInstance().retrieveAll();
+        final var s1 = new DefaultComboBoxModel<String>();
+        for(int i =0; i < allEmployee.size(); ++i){
+            
+            if(allEmployee.get(i).getSector().equals(Sector.TEACHING)) s1.addElement(allEmployee.get(i).getName());
+        }
+        comboTeacher.setModel(s1);
+    }
+    
+    private void set(){
+         setSubjects();
+         setTeachers();
+        if(course != null){
+            txtYear.setText(Integer.toString(course.getYear()));
+           comboSubjectCode.getModel().setSelectedItem(course.getSubject().getCode());
+           comboTeacher.getModel().setSelectedItem(course.getTeacher().getName());
+           jCheckCompleted.getModel().setArmed(course.getCompleted());
+        }
+        if(!readOnly){
+            txtYear.setEnabled(true);
+            comboSubjectCode.setEnabled(true);
+            comboTeacher.setEnabled(true);
+            jCheckCompleted.setEnabled(true);
+        }else{
+            comboSubjectCode.setEnabled(false);
+            comboTeacher.setEnabled(false);
+            jCheckCompleted.setEnabled(false);
+        }
+        
+    }
+    private Employee findByName(String name){
+        for(int i =0; i < allEmployee.size(); ++i){
+            if(allEmployee.get(i).getName().equals(name.intern())) return allEmployee.get(i);
+        }
+        return null;
+    }
+    
+   private Subject findSubjetcByCode(String Code) {
+        for (int i = 0; i < allSubjects.size(); ++i) {
+            if (Code.equals(allSubjects.get(i).getCode())) {
+                return allSubjects.get(i);
+            }
+        }
+        return null;
+    }
+    private void updateEntity(){
+        final var year = Integer.parseInt(txtYear.getText());
+        final var teacher =findByName(comboTeacher.getModel().getSelectedItem().toString());
+        final var subject = findSubjetcByCode(comboSubjectCode.getModel().getSelectedItem().toString());
+        final var completed = jCheckCompleted.getModel().isArmed();
+        final Integer id = (course == null ? null:course.getId().get());
+        CourseDao.getInstance().createOrUpdate(new Course(id,subject,teacher, year,completed));
+    }
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jTextField1 = new javax.swing.JTextField();
+        jTextField2 = new javax.swing.JTextField();
+        lblDatabaseStatus = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        comboSubjectCode = new javax.swing.JComboBox<>();
+        labelCode = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        btnOk = new javax.swing.JButton();
+        comboTeacher = new javax.swing.JComboBox<>();
+        txtYear = new javax.swing.JTextField();
+        jCheckCompleted = new javax.swing.JCheckBox();
+
+        jTextField1.setText("jTextField1");
+
+        jTextField2.setText("jTextField2");
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        lblDatabaseStatus.setForeground(new java.awt.Color(102, 102, 0));
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel4.setText("Professor:");
+
+        comboSubjectCode.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboSubjectCode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboSubjectCodeActionPerformed(evt);
+            }
+        });
+
+        labelCode.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        labelCode.setText("Código Da Disciplina:");
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel3.setText("Ano:");
+
+        btnOk.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnOk.setText("OK");
+        btnOk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOkActionPerformed(evt);
+            }
+        });
+
+        comboTeacher.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboTeacher.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboTeacherActionPerformed(evt);
+            }
+        });
+
+        txtYear.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtYear.setEnabled(false);
+        txtYear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtYearActionPerformed(evt);
+            }
+        });
+
+        jCheckCompleted.setText("Completo");
+        jCheckCompleted.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckCompletedActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(lblDatabaseStatus, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
+                        .addGap(194, 194, 194))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(comboSubjectCode, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(83, 83, 83)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
+                                    .addComponent(txtYear)))
+                            .addComponent(comboTeacher, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(labelCode, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jCheckCompleted, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btnOk)))
+                        .addGap(25, 25, 25))))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(53, 53, 53)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelCode)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(comboSubjectCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(17, 17, 17)
+                .addComponent(jLabel4)
+                .addGap(3, 3, 3)
+                .addComponent(comboTeacher, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jCheckCompleted)
+                .addGap(139, 139, 139)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblDatabaseStatus, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnOk))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void comboSubjectCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboSubjectCodeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboSubjectCodeActionPerformed
+
+    private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
+        if (!readOnly) {
+            lblDatabaseStatus.setText("Salvando no banco de dados...");
+            java.awt.EventQueue.invokeLater(() -> updateEntity());
+        }
+        dispose();
+    }//GEN-LAST:event_btnOkActionPerformed
+
+    private void comboTeacherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboTeacherActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboTeacherActionPerformed
+
+    private void txtYearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtYearActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtYearActionPerformed
+
+    private void jCheckCompletedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckCompletedActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckCompletedActionPerformed
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnOk;
+    private javax.swing.JComboBox<String> comboSubjectCode;
+    private javax.swing.JComboBox<String> comboTeacher;
+    private javax.swing.JCheckBox jCheckCompleted;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
+    private javax.swing.JLabel labelCode;
+    private javax.swing.JLabel lblDatabaseStatus;
+    private javax.swing.JTextField txtYear;
+    // End of variables declaration//GEN-END:variables
+}
