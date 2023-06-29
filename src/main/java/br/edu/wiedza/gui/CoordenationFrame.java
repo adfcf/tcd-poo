@@ -23,6 +23,7 @@
  */
 package br.edu.wiedza.gui;
 
+import br.edu.wiedza.db.Database;
 import br.edu.wiedza.db.dao.CourseDao;
 import br.edu.wiedza.db.dao.SubjectDao;
 import br.edu.wiedza.entities.classroom.Course;
@@ -32,9 +33,18 @@ import br.edu.wiedza.gui.forms.CourseForm;
 import br.edu.wiedza.gui.forms.SubjectForm;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JDialog;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -53,14 +63,12 @@ public class CoordenationFrame extends javax.swing.JFrame {
         lblName.setText(user.getName());
         allCourses = CourseDao.getInstance().retrieveAll();
         setLocationRelativeTo(null);
-        
 
         updateEntities();
     }
 
     private void updateEntities() {
-        
-     
+
         listSubjects.setModel(new DefaultListModel<>());
         allSubjects = SubjectDao.getInstance().retrieveAll();
 
@@ -78,8 +86,8 @@ public class CoordenationFrame extends javax.swing.JFrame {
 
         listSubjects.setModel(s1);
         listCourses.setModel(s2);
-         btnReportCourses.setEnabled(true);
-         btnReportSubject.setEnabled(true);
+        btnReportCourses.setEnabled(true);
+        btnReportSubject.setEnabled(true);
 
     }
 
@@ -413,23 +421,33 @@ public class CoordenationFrame extends javax.swing.JFrame {
         lf.setVisible(true);
         lf.start();
     }//GEN-LAST:event_btnExitActionPerformed
+    private void makeReports(String reportName) {
 
+        try (InputStream in = getClass().getResourceAsStream(reportName)) {
+
+            JasperPrint jasperPrint = JasperFillManager.fillReport(in, null, Database.getConnection());
+
+            JasperViewer jasperViewer = new JasperViewer(jasperPrint, false);
+
+            JDialog dialog = new JDialog(this);
+            dialog.setContentPane(jasperViewer.getContentPane());
+            dialog.setSize(jasperViewer.getSize());
+            dialog.setTitle(reportName);
+            dialog.setModal(true);
+            dialog.setVisible(true);
+
+        } catch (IOException | JRException ex) {
+            Logger.getLogger(SecretariatFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     private void btnReportSubjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportSubjectActionPerformed
-        // TODO add your handling code here:
+        makeReports("/SubjectReport.jasper");
     }//GEN-LAST:event_btnReportSubjectActionPerformed
 
     private void btnReportCoursesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportCoursesActionPerformed
-        // TODO add your handling code here:
+        makeReports("/CourseReport.jasper");
     }//GEN-LAST:event_btnReportCoursesActionPerformed
-    private void setCourseListByYear(int year) {
-        final var s2 = new DefaultListModel<String>();
-        for (int i = 0; i < allCourses.size(); ++i) {
-            if (allCourses.get(i).getYear() == year) {
-                s2.add(i, allCourses.get(i).getSubject().getCode());
-            }
-        }
-        listCourses.setModel(s2);
-    }
+ 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEditCourse;
     private javax.swing.JButton btnEditSubject;

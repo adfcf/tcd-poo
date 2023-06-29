@@ -123,6 +123,7 @@
                               <Component id="btnViewLocation" pref="115" max="32767" attributes="0"/>
                           </Group>
                           <Component id="btnNewLocation" min="-2" pref="115" max="-2" attributes="0"/>
+                          <Component id="btnReportLocations" min="-2" pref="115" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="17" max="32767" attributes="0"/>
                   </Group>
@@ -140,6 +141,8 @@
                               <Component id="btnViewLocation" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="btnEditLocation" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="btnReportLocations" min="-2" pref="36" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace pref="38" max="32767" attributes="0"/>
@@ -212,6 +215,21 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEditLocationActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="btnReportLocations">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Segoe UI" size="8" style="0"/>
+                </Property>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/IconReport.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="&lt;html&gt; &lt;p&gt;Relat&#xf3;rio  &lt;br&gt;de Instala&#xe7;&#xf5;es&#xa; &lt;/p&gt;   &lt;html&gt;"/>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnReportLocationsActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>
@@ -439,6 +457,7 @@
                           <Component id="btnEditEmployee" min="-2" pref="115" max="-2" attributes="0"/>
                           <Component id="btnViewEmployee" min="-2" pref="115" max="-2" attributes="0"/>
                           <Component id="btnNewEmployee" min="-2" pref="115" max="-2" attributes="0"/>
+                          <Component id="btnReportEmployee" min="-2" pref="115" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="17" max="32767" attributes="0"/>
                   </Group>
@@ -456,6 +475,8 @@
                               <Component id="btnViewEmployee" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="btnEditEmployee" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="btnReportEmployee" min="-2" pref="36" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace pref="38" max="32767" attributes="0"/>
@@ -528,6 +549,21 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEditEmployeeActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="btnReportEmployee">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Segoe UI" size="8" style="0"/>
+                </Property>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/IconReport.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="&lt;html&gt; &lt;p&gt;Relat&#xf3;rio  &lt;br&gt;de Funcion&#xe1;rios&#xa; &lt;/p&gt;   &lt;html&gt;"/>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnReportEmployeeActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>
