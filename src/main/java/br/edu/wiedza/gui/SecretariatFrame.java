@@ -69,17 +69,11 @@ public class SecretariatFrame extends javax.swing.JFrame {
 
         this.currentUser = currentUser;
         this.lblName.setText(currentUser.getName());
-
-        combReports.setModel(getReportsListModel());
-
+        
+        Util.enableAll(btnReportGrades, btnReportOccurrence);
         updateEntities();
     }
-
-    private DefaultComboBoxModel<String> getReportsListModel() {
-
-        return new DefaultComboBoxModel<String>(new String[]{"Ocorrências", "Boletim"});
-    }
-
+    
     private void updateEntities() {
 
         listStudents.setModel(new DefaultListModel<>());
@@ -97,7 +91,9 @@ public class SecretariatFrame extends javax.swing.JFrame {
         for (int i = 0; i < allOcurrences.size(); ++i) {
             s2.add(i, allOcurrences.get(i).getStudent().getName() + " - " + allOcurrences.get(i).getDate().toString());
         }
-
+        
+        txtSearchStudent.setText("");
+        txtSearchOccurrence.setText("");
         listStudents.setModel(s1);
         listOccurrences.setModel(s2);
     }
@@ -166,11 +162,8 @@ public class SecretariatFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         combReports = new javax.swing.JComboBox<>();
+        jTabbedPane2 = new javax.swing.JTabbedPane();
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel4 = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
-        lblReports = new javax.swing.JLabel();
-        btnGenerate = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jPanel10 = new javax.swing.JPanel();
         btnViewStudent = new javax.swing.JButton();
@@ -180,7 +173,7 @@ public class SecretariatFrame extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         listStudents = new javax.swing.JList<>();
         txtSearchStudent = new javax.swing.JTextField();
-        btnGenerateGradesReport = new javax.swing.JButton();
+        btnReportGrades = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -193,6 +186,7 @@ public class SecretariatFrame extends javax.swing.JFrame {
         btnNewOccurrence = new javax.swing.JButton();
         btnViewOccurrence = new javax.swing.JButton();
         btnEditOccurrence = new javax.swing.JButton();
+        btnReportOccurrence = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         lblName = new javax.swing.JLabel();
         btnExit = new javax.swing.JButton();
@@ -204,56 +198,6 @@ public class SecretariatFrame extends javax.swing.JFrame {
 
         jTabbedPane1.setToolTipText("");
         jTabbedPane1.setFont(new java.awt.Font("DejaVu Sans", 0, 14)); // NOI18N
-
-        jPanel5.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jPanel5.setFocusable(false);
-
-        lblReports.setFont(new java.awt.Font("DejaVu Sans", 0, 14)); // NOI18N
-        lblReports.setText("Relatório a ser gerado:");
-
-        btnGenerate.setFont(new java.awt.Font("DejaVu Sans", 0, 14)); // NOI18N
-        btnGenerate.setText("Gerar relatório");
-        btnGenerate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGenerateActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(65, 65, 65)
-                .addComponent(lblReports)
-                .addContainerGap(227, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnGenerate)
-                .addGap(77, 77, 77))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(63, 63, 63)
-                .addComponent(lblReports)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 139, Short.MAX_VALUE)
-                .addComponent(btnGenerate)
-                .addGap(71, 71, 71))
-        );
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab("Documentação", jPanel4);
 
         jPanel10.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -304,10 +248,13 @@ public class SecretariatFrame extends javax.swing.JFrame {
             }
         });
 
-        btnGenerateGradesReport.setText("jButton1");
-        btnGenerateGradesReport.addActionListener(new java.awt.event.ActionListener() {
+        btnReportGrades.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
+        btnReportGrades.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconReport.png"))); // NOI18N
+        btnReportGrades.setText("<html><p>Relatório</p> <p>Notas</p><html>");
+        btnReportGrades.setEnabled(false);
+        btnReportGrades.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGenerateGradesReportActionPerformed(evt);
+                btnReportGradesActionPerformed(evt);
             }
         });
 
@@ -325,11 +272,11 @@ public class SecretariatFrame extends javax.swing.JFrame {
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
-                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnEditStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnNewStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnViewStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnGenerateGradesReport, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnEditStudent, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
+                            .addComponent(btnNewStudent, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
+                            .addComponent(btnViewStudent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnReportGrades, javax.swing.GroupLayout.Alignment.TRAILING))))
                 .addGap(38, 38, 38))
         );
         jPanel10Layout.setVerticalGroup(
@@ -347,8 +294,8 @@ public class SecretariatFrame extends javax.swing.JFrame {
                         .addComponent(btnEditStudent)
                         .addGap(18, 18, 18)
                         .addComponent(btnViewStudent)
-                        .addGap(28, 28, 28)
-                        .addComponent(btnGenerateGradesReport)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnReportGrades, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE))
                 .addContainerGap())
@@ -427,6 +374,16 @@ public class SecretariatFrame extends javax.swing.JFrame {
             }
         });
 
+        btnReportOccurrence.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
+        btnReportOccurrence.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IconReport.png"))); // NOI18N
+        btnReportOccurrence.setText("<html><p>Relatório</p> <p>Ocorrências</p><html>");
+        btnReportOccurrence.setEnabled(false);
+        btnReportOccurrence.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReportOccurrenceActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -451,8 +408,9 @@ public class SecretariatFrame extends javax.swing.JFrame {
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btnNewOccurrence, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnViewOccurrence, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnEditOccurrence, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(40, 40, 40))))
+                            .addComponent(btnEditOccurrence, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnReportOccurrence, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(37, 37, 37))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -474,7 +432,9 @@ public class SecretariatFrame extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(btnViewOccurrence)
                         .addGap(18, 18, 18)
-                        .addComponent(btnEditOccurrence)))
+                        .addComponent(btnEditOccurrence)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnReportOccurrence, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -621,11 +581,6 @@ public class SecretariatFrame extends javax.swing.JFrame {
         Util.enableAll(btnViewOccurrence, btnEditOccurrence);
     }//GEN-LAST:event_listOccurrencesValueChanged
 
-    private void btnGenerateGradesReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateGradesReportActionPerformed
-
-        makeReports("/Grades.jasper");
-    }//GEN-LAST:event_btnGenerateGradesReportActionPerformed
-
     private void txtSearchStudentKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchStudentKeyReleased
 
         final var searchTerm = txtSearchStudent.getText();
@@ -691,22 +646,23 @@ public class SecretariatFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnViewStudentActionPerformed
 
-    private void btnGenerateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateActionPerformed
+    private void btnReportGradesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportGradesActionPerformed
+        makeReports("/Grades.jasper");
+    }//GEN-LAST:event_btnReportGradesActionPerformed
 
-        final String selectedReport = combReports.getItemAt(combReports.getSelectedIndex());
-
-        makeReports(selectedReport);
-    }//GEN-LAST:event_btnGenerateActionPerformed
+    private void btnReportOccurrenceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportOccurrenceActionPerformed
+        makeReports("/OcurrenceReport.jasper");
+    }//GEN-LAST:event_btnReportOccurrenceActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEditOccurrence;
     private javax.swing.JButton btnEditStudent;
     private javax.swing.JButton btnExit;
-    private javax.swing.JButton btnGenerate;
-    private javax.swing.JButton btnGenerateGradesReport;
     private javax.swing.JButton btnNewOccurrence;
     private javax.swing.JButton btnNewStudent;
+    private javax.swing.JButton btnReportGrades;
+    private javax.swing.JButton btnReportOccurrence;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnViewOccurrence;
     private javax.swing.JButton btnViewStudent;
@@ -719,13 +675,11 @@ public class SecretariatFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JLabel lblName;
-    private javax.swing.JLabel lblReports;
     private javax.swing.JLabel lblStudentName;
     private javax.swing.JList<String> listOccurrences;
     private javax.swing.JList<String> listStudents;
