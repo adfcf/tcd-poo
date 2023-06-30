@@ -60,7 +60,7 @@ public abstract class Dao<E extends Entity> implements IDao<E> {
             // System.out.println("SQL: " + statement.toString());
             
             final int count = statement.executeUpdate();
-            System.out.println("Affected rows: " + count);
+            // System.out.println("Affected rows: " + count);
             
         } catch (SQLException exception) {
             System.out.println(exception);
@@ -81,10 +81,10 @@ public abstract class Dao<E extends Entity> implements IDao<E> {
             var keys = statement.getGeneratedKeys();
             
             if (keys.first()) {
-                System.out.println("OK");
+                // System.out.println("OK");
                 e.setId(keys.getInt(1));
             } else {
-                System.out.println("No rows affected");
+                // System.out.println("No rows affected");
             }
             
         } catch (SQLException exception) {
