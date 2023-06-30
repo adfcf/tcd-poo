@@ -342,7 +342,6 @@ public class CoordenationFrame extends javax.swing.JFrame {
         System.out.println(subject);
         for (int i = 0; i < allCourses.size(); ++i) {
             if (subject.equals(allCourses.get(i).getSubject().getCode().intern())) {
-                System.out.println(allCourses.get(i).getSubject().getCode());
                 return allCourses.get(i);
             }
         }
